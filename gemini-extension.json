@@ -1,0 +1,8 @@
+{
+  "name": "doku-gemini-mcp",
+  "description": "Plugin kustomisasi Antigravity / Gemini untuk integrasi DOKU Payment Gateway & MCP Server",
+  "version": "1.0.0",
+  "author": {
+    "name": "Roedy Rustam"
+  }
+}

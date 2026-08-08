@@ -5,6 +5,7 @@
   "author": {
     "name": "Roedy Rustam"
   },
+  "repository": "https://github.com/roedyrustam/doku-gemini-mcp.git",
   "license": "MIT",
   "keywords": [
     "doku",
