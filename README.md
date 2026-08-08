@@ -12,6 +12,65 @@
 
 ---
 
+## ⚡ 1-Command Agentic Workflow Architecture
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                 1-COMMAND AGENTIC INTEGRATION WORKFLOW                                 │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                        │
+│   USER PROMPT: "Setup DOKU integration for my app"                                                     │
+│                                                                                                        │
+│        │                                                                                               │
+│        ▼                                                                                               │
+│   ┌────────────────────────┐    Auto-detects language, framework, & package manager                    │
+│   │ 1. detect-stack        ├─────────────────────────────────────────────────────────────┐             │
+│   └───────────┬────────────┘                                                           │             │
+│               │                                                                        │             │
+│               ▼                                                                        ▼             │
+│   ┌────────────────────────┐    Injects DOKU_CLIENT_ID & DOKU_SECRET_KEY               ┌──────────┐  │
+│   │ 2. setup-credentials   ├──────────────────────────────────────────────────────────►│  .env    │  │
+│   └───────────┬────────────┘                                                           └──────────┘  │
+│               │                                                                                      │
+│               ▼                                                                                      │
+│   ┌────────────────────────┐    Scaffolds DokuService with Base64 SHA-256 Digest &                      │
+│   │ 3. setup-project       ├─────────────────────────────────────────────────────────────┐             │
+│   └───────────┬────────────┘    HMAC-SHA256 Signature calculation                      │             │
+│               │                                                                        ▼             │
+│               ▼                                                                 ┌─────────────┐      │
+│   ┌────────────────────────┐    Scaffolds Webhook Listener with                 │ DokuService │      │
+│   │ 4. webhook-receiver    ├───────────────────────────────────────────────►└──────┬──────┘      │
+│   └───────────┬────────────┘    timingSafeEqual & Idempotency Guard                    │             │
+│               │                                                                        ▼             │
+│               ▼                                                                 ┌─────────────┐      │
+│   ┌────────────────────────┐    Executes live test request against Sandbox API  │ Webhook Route│     │
+│   │ 5. mock-test           ├───────────────────────────────────────────────────►└─────────────┘      │
+│   └────────────────────────┘    Returns HTTP 200 OK & Verified Payment Link!                         │
+│                                                                                                        │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Developer as 🧑‍💻 Developer
+    participant Agent as 🤖 Antigravity / Gemini AI Agent
+    participant Plugin as 🔌 doku-gemini-mcp Plugin
+    participant DOKU as 🏦 DOKU Payment Gateway (Sandbox)
+
+    Developer->>Agent: "Setup DOKU Checkout integration"
+    Agent->>Plugin: Activate `setup-project` skill
+    Plugin->>Plugin: Auto-detect stack (Node.js/TS, Python, Go, PHP)
+    Plugin->>Plugin: Inject DOKU credentials & update `.env`
+    Plugin->>Agent: Scaffold `DokuService` with HMAC-SHA256 signature math
+    Plugin->>Agent: Scaffold `/api/webhook` listener with timingSafeEqual
+    Agent->>DOKU: Execute live test request via `mock-test` skill
+    DOKU-->>Agent: HTTP 200 OK (Payment Link Created & Signature Verified)
+    Agent-->>Developer: 🚀 Complete, production-ready DOKU integration generated!
+```
+
+---
+
 <a name="english"></a>
 ## English
 

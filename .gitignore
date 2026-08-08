@@ -1,0 +1,34 @@
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Dependencies & Build Outputs
+node_modules/
+dist/
+build/
+out/
+.doku-config.json
+.doku-spec.json
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# IDE & Editor Settings
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs & Temporary Files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+tmp/
+scratch/
