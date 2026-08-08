@@ -42,6 +42,10 @@ Activate this skill when the user says:
    - If HTTP 401: Explain signature mismatch causes (trailing newline, timestamp milliseconds, unsorted JSON).
    - If HTTP 200/201: Report successful integration test.
 
+4. **Simulate Payment Event**:
+   - Open **DOKU Payment Simulator**: `https://sandbox.doku.com/integration/simulator/`
+   - Enter Payment Code / Virtual Account / Invoice Number to trigger success webhook notifications to your local listener.
+
 ---
 
 <a name="bahasa-indonesia"></a>

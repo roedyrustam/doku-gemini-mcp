@@ -28,11 +28,11 @@ Activate this skill when the user is:
 
 ### Core Architecture & Credentials
 
-#### Environment Gateways
-| Environment | Base URL | Dashboard Portal |
-|---|---|---|
-| **Sandbox** | `https://api-sandbox.doku.com` | `https://sandbox.doku.com` |
-| **Production** | `https://api.doku.com` | `https://dashboard.doku.com` |
+#### Environment Gateways & Testing Tools
+| Environment | Base URL | Dashboard / Back Office | Payment Simulator |
+|---|---|---|---|
+| **Sandbox** | `https://api-sandbox.doku.com` | `https://sandbox.doku.com/bo/login` | `https://sandbox.doku.com/integration/simulator/` |
+| **Production** | `https://api.doku.com` | `https://dashboard.doku.com` | N/A |
 
 #### Mandatory Headers
 - `Client-Id`: Merchant Client ID.

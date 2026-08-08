@@ -27,7 +27,7 @@ Activate this skill when the user says:
 ### Step-by-Step Execution Protocol
 
 1. **Prompt for Required Credentials**:
-   - `DOKU_CLIENT_ID` (Merchant Client ID from DOKU Back Office).
+   - `DOKU_CLIENT_ID` (Merchant Client ID from DOKU Back Office Sandbox: `https://sandbox.doku.com/bo/login`).
    - `DOKU_SECRET_KEY` (Merchant Secret Key).
    - `DOKU_IS_PRODUCTION` (`false` for Sandbox, `true` for Production).
 
