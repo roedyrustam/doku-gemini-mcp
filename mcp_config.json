@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "doku": {
+      "command": "node",
+      "args": [
+        "./dist/index.js"
+      ],
+      "env": {
+        "DOKU_CLIENT_ID": "YOUR_DOKU_CLIENT_ID",
+        "DOKU_SECRET_KEY": "YOUR_DOKU_SECRET_KEY",
+        "DOKU_IS_PRODUCTION": "false"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "doku-gemini-mcp",
+  "version": "1.0.0",
+  "description": "Plugin kustomisasi Antigravity / Gemini untuk integrasi DOKU Payment Gateway (Jokul API v2) & Model Context Protocol (MCP) Server.",
+  "author": {
+    "name": "Roedy Rustam"
+  },
+  "license": "MIT",
+  "keywords": [
+    "doku",
+    "payment-gateway",
+    "mcp",
+    "gemini",
+    "antigravity",
+    "jokul-api",
+    "qris",
+    "virtual-account"
+  ]
+}
