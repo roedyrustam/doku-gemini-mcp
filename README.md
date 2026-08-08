@@ -46,6 +46,75 @@ Baik Anda mengimplementasikan DOKU Checkout, Virtual Account Langsung (BCA, Mand
 
 ---
 
+## Installation & Setup for Antigravity IDE & Gemini CLI
+
+### Option A: Global Installation (Recommended)
+
+Installing the plugin globally allows **Antigravity IDE** and **Gemini CLI** to automatically discover all 11 skills and security rules across all your workspaces without extra configuration.
+
+#### 1. Clone to Global Plugin Root
+- **Windows (PowerShell)**:
+  ```powershell
+  git clone https://github.com/roedyrustam/doku-gemini-mcp.git "$env:USERPROFILE\.gemini\config\plugins\doku-gemini-mcp"
+  ```
+- **macOS / Linux / WSL (Bash)**:
+  ```bash
+  git clone https://github.com/roedyrustam/doku-gemini-mcp.git ~/.gemini/config/plugins/doku-gemini-mcp
+  ```
+
+#### 2. Auto-Discovery Verification
+Once cloned into `~/.gemini/config/plugins/doku-gemini-mcp`, Antigravity IDE will automatically detect:
+- `plugin.json` metadata & rules (`AGENTS.md`, `rules/*.md`).
+- All 11 specialized skills under `skills/`.
+
+---
+
+### Option B: Workspace-Specific Installation
+
+If you prefer to include the plugin directly inside a specific project repository:
+
+1. Create a `.agents` folder in your project root:
+   ```bash
+   mkdir -p .agents/plugins
+   ```
+2. Clone the repository into `.agents/plugins`:
+   ```bash
+   git clone https://github.com/roedyrustam/doku-gemini-mcp.git .agents/plugins/doku-gemini-mcp
+   ```
+
+---
+
+### Option C: DOKU MCP Server Registration
+
+To enable **AI Agentic Commerce** (allowing the AI agent to generate payment links, issue Virtual Accounts, and generate QRIS codes autonomously via MCP tools):
+
+#### 1. Copy or update `mcp_config.json`
+- **Antigravity IDE**: Place in `~/.gemini/antigravity-ide/mcp_config.json`
+- **Claude Desktop**: Place in `%APPDATA%\Claude\claude_desktop_config.json` (Windows) or `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS).
+
+#### 2. Configuration Example
+```json
+{
+  "mcpServers": {
+    "doku": {
+      "command": "node",
+      "args": ["C:/Users/YOUR_USER/.gemini/config/plugins/doku-gemini-mcp/dist/index.js"],
+      "env": {
+        "DOKU_CLIENT_ID": "YOUR_SANDBOX_CLIENT_ID",
+        "DOKU_SECRET_KEY": "YOUR_SANDBOX_SECRET_KEY",
+        "DOKU_IS_PRODUCTION": "false"
+      }
+    }
+  }
+}
+```
+
+> [!TIP]
+> Retrieve your Sandbox Client ID and Secret Key from [DOKU Sandbox Back Office](https://sandbox.doku.com/bo/login).  
+> Test payments and webhooks using [DOKU Integration Payment Simulator](https://sandbox.doku.com/integration/simulator/).
+
+---
+
 ## Directory Structure
 
 ```text
