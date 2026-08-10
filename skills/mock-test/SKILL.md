@@ -32,9 +32,10 @@ Activate this skill when the user says:
    - Invoice: `INV-TEST-YYYYMMDDHHMMSS`.
 
 2. **Compute Signature Components**:
-   - `Digest` = Base64(SHA256(Raw JSON Body))
+   - For `POST` requests: `Digest` = Base64(SHA256(Raw JSON Body)).
    - `Component` = `Client-Id:<ID>\nRequest-Id:<UUID>\nRequest-Timestamp:<TIMESTAMP>\nRequest-Target:/checkout/v1/payment\nDigest:<DIGEST>`
-   - `Signature` = `HMACSHA256=` + Base64(HMAC-SHA256(Component, SECRET_KEY))
+   - For `GET` requests: Omit `\nDigest:<DIGEST>`.
+   - `Signature` = `HMACSHA256=` + Base64(HMAC-SHA256(Component, SECRET_KEY)).
 
 3. **Send Request to Sandbox**:
    - Endpoint: `https://api-sandbox.doku.com/checkout/v1/payment`
@@ -59,3 +60,4 @@ Aktifkan skill ini ketika pengguna mengatakan:
 - `"test DOKU integration"`
 - `"jalankan tes sandbox DOKU"`
 - `"verifikasi kalkulasi signature DOKU"`
+

@@ -4,7 +4,7 @@ description: "Fetch, extract, and structure official DOKU Payment Gateway API sp
 author: "Roedy Rustam"
 ---
 
-# Fetch DOKU API Spec / Ambill Spesifikasi API DOKU
+# Fetch DOKU API Spec / Ambil Spesifikasi API DOKU
 
 [English](#english) | [Bahasa Indonesia](#bahasa-indonesia)
 
@@ -29,24 +29,30 @@ Activate this skill when the user says:
 1. **Verify Target Core Endpoints**:
    - Checkout API: `/checkout/v1/payment`
    - Virtual Account API: `/doku-virtual-account/v2/payment-code`
-   - QRIS API: `/qris/v1/payment-code`
+   - QRIS API (Jokul): `/qris/v1/payment-code`
+   - QRIS API (SNAP): `/snap-adapter/b2b/v1.0/qr/qr-mpm-generate`
    - E-Wallet API: `/e-wallet/v1/payment`
    - Direct Card API: `/credit-card/v1/payment`
    - Status Inquiry API: `/orders/v1/status/:invoice_number`
+   - Online Refund API: `/orders/v1/refund`
 
 2. **Validate Mandatory Headers Standard**:
-   - `Client-Id`, `Request-Id`, `Request-Timestamp`, `Request-Target`, `Digest`, `Signature`.
+   - Jokul v2: `Client-Id`, `Request-Id`, `Request-Timestamp`, `Request-Target`, `Digest`, `Signature`.
+   - SNAP v1.0: `X-TIMESTAMP`, `X-SIGNATURE`, `X-CLIENT-KEY`, `X-PARTNER-ID`, `X-EXTERNAL-ID`, `CHANNEL-ID`.
 
 3. **Generate Local Spec Cache (`.doku-spec.json`)**:
    ```json
    {
      "apiVersion": "v2",
+     "snapVersion": "v1.0",
      "lastUpdated": "2026-08-09T00:00:00Z",
      "endpoints": {
        "checkout": "/checkout/v1/payment",
        "virtualAccount": "/doku-virtual-account/v2/payment-code",
-       "qris": "/qris/v1/payment-code",
-       "status": "/orders/v1/status"
+       "qrisJokul": "/qris/v1/payment-code",
+       "qrisSnap": "/snap-adapter/b2b/v1.0/qr/qr-mpm-generate",
+       "status": "/orders/v1/status",
+       "refund": "/orders/v1/refund"
      },
      "signatureAlgorithm": "HMACSHA256"
    }
@@ -65,3 +71,4 @@ Aktifkan skill ini ketika pengguna mengatakan:
 - `"fetch DOKU API spec"`
 - `"perbarui endpoint DOKU"`
 - `"unduh dokumentasi API DOKU"`
+

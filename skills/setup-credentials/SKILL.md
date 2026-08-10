@@ -27,9 +27,9 @@ Activate this skill when the user says:
 ### Step-by-Step Execution Protocol
 
 1. **Prompt for Required Credentials**:
-   - `DOKU_CLIENT_ID` (Merchant Client ID from DOKU Back Office Sandbox: `https://sandbox.doku.com/bo/login`).
+   - `DOKU_CLIENT_ID` (Merchant Client ID from DOKU Back Office Sandbox: `https://sandbox.doku.com/bo/login` or Production: `https://dashboard.doku.com`).
    - `DOKU_SECRET_KEY` (Merchant Secret Key).
-   - `DOKU_IS_PRODUCTION` (`false` for Sandbox, `true` for Production).
+   - `DOKU_IS_PRODUCTION` (`false` for Sandbox `https://api-sandbox.doku.com`, `true` for Production `https://api.doku.com`).
 
 2. **Update Environment Files (`.env` & `.env.example`)**:
    - Append to `.env`:
@@ -56,3 +56,4 @@ Aktifkan skill ini ketika pengguna mengatakan:
 - `"set up DOKU credentials"`
 - `"konfigurasi kunci DOKU"`
 - `"tambahkan API key DOKU"`
+

@@ -37,10 +37,11 @@ Activate this skill when the user says:
      Client-Id:<CLIENT_ID>\nRequest-Id:<REQUEST_ID>\nRequest-Timestamp:<TIMESTAMP>\nRequest-Target:<TARGET_PATH>\nDigest:<DIGEST_STRING>
      ```
    - Ensure no trailing newline `\n` in component string.
+   - For `GET` requests, omit `\nDigest:<DIGEST_STRING>` completely.
    - ISO8601 UTC timestamp format without milliseconds (`YYYY-MM-THH:mm:ssZ`).
 
 3. **Provide Usage Example**:
-   - Demonstrate initiating Checkout payment, Virtual Account, and QRIS payments.
+   - Demonstrate initiating Checkout payment, Virtual Account, QRIS payments, and transaction status inquiries.
 
 ---
 
@@ -55,3 +56,4 @@ Aktifkan skill ini ketika pengguna mengatakan:
 - `"generate DOKU code"`
 - `"setup DOKU integration"`
 - `"buat kode DOKU"`
+

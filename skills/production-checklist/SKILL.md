@@ -30,8 +30,8 @@ Activate this skill when the user says:
 |---|---|---|---|
 | 1 | **Secrets Safety** | No hardcoded `CLIENT_ID` or `SECRET_KEY` in source files. | Scan codebase for string literals matching DOKU keys. |
 | 2 | **Signature Strictness** | Exact component string format without trailing newline `\n`. | Inspect signature calculation assembly logic. |
-| 3 | **Timestamp Format** | UTC ISO8601 string without milliseconds (ends in `Z`). | Check timestamp formatting function. |
-| 4 | **Webhook Signature Verification** | Reject unverified callback requests with HTTP `401 Unauthorized`. | Verify HMAC-SHA256 callback validator implementation. |
+| 3 | **Timestamp Format** | UTC ISO8601 string without milliseconds (ends in `Z`). | Check timestamp formatting function (`.replace(/\.\d{3}Z$/, 'Z')`). |
+| 4 | **Webhook Signature Verification** | Reject unverified callback requests with HTTP `401 Unauthorized`. | Verify HMAC-SHA256 callback verifier implementation using `crypto.timingSafeEqual`. |
 | 5 | **Webhook Idempotency** | Prevent duplicate order fulfillment on repeated callback retries. | Check database atomic state checks before order update. |
 | 6 | **Log Sanitization** | No customer PII or secret key leakage in application stdout/logs. | Check log statements in payment and webhook handlers. |
 | 7 | **Production Gateway URL** | Dynamic switch between `api-sandbox.doku.com` and `api.doku.com`. | Inspect `DOKU_IS_PRODUCTION` environment flag check. |
@@ -50,3 +50,4 @@ Aktifkan skill ini ketika pengguna mengatakan:
 - `"production checklist"`
 - `"periksa kesiapan go-live DOKU"`
 - `"audit konfigurasi produksi DOKU"`
+

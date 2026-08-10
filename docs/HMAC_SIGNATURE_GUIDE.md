@@ -47,7 +47,22 @@ HMAC-SHA256(SecretKey, ComponentString) -> Base64 Encode -> Prepend "HMACSHA256=
 
 ---
 
+## 2.1 SNAP Symmetric Signature Calculation
+
+For DOKU SNAP Adapter endpoints:
+- **String to Sign Assembly**:
+  ```text
+  HTTPMethod + ":" + EndpointUrl + ":" + AccessToken + ":" + Lowercase(HexEncode(SHA-256(MinifiedRequestBody))) + ":" + Timestamp
+  ```
+- **HMAC-SHA512 Signing**:
+  ```text
+  HMAC-SHA512(SecretKey, StringToSign) -> Base64 Encode -> Signature Header
+  ```
+
+---
+
 ## 3. Multi-Language Implementations
+
 
 ### Node.js / TypeScript
 ```typescript

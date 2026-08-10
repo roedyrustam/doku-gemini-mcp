@@ -1,6 +1,6 @@
 ---
 name: webhook-receiver
-description: "Scaffold HTTP webhook notification listener endpoint with cryptographic HMAC-SHA256 signature verification, replay attack prevention, and atomic database updates / Buat handler webhook notifikasi dengan verifikator signature HMAC-SHA256 dan anti-replay guard."
+description: "Scaffold HTTP webhook notification listener endpoint with cryptographic HMAC-SHA256 & SNAP signature verification, replay attack prevention, and atomic database updates / Buat handler webhook notifikasi dengan verifikator signature HMAC-SHA256 & SNAP dan anti-replay guard."
 author: "Roedy Rustam"
 ---
 
@@ -14,7 +14,7 @@ author: "Roedy Rustam"
 ## English
 
 ### Description
-Scaffolds a production-ready HTTP webhook handler endpoint for receiving payment notifications from DOKU. Includes mandatory HMAC-SHA256 signature verification, rejection of unverified requests (`401 Unauthorized`), idempotency checks against duplicate notifications, and atomic database transaction updates.
+Scaffolds a production-ready HTTP webhook handler endpoint for receiving payment notifications from DOKU. Includes mandatory HMAC-SHA256 & SNAP `X-SIGNATURE` verification, rejection of unverified requests (`401 Unauthorized`), idempotency checks against duplicate notifications, and atomic database transaction updates.
 
 ### Trigger Conditions
 Activate this skill when the user says:
@@ -30,6 +30,9 @@ Activate this skill when the user says:
 import crypto from 'crypto';
 import { Request, Response } from 'express';
 
+/**
+ * Validates Jokul API v2 Webhook Signature (Client-Id, Request-Id, Request-Timestamp, Request-Target, Digest, Signature)
+ */
 export function verifyDokuNotificationSignature(req: Request, secretKey: string): boolean {
   const clientId = req.headers['client-id'] as string;
   const requestId = req.headers['request-id'] as string;
@@ -62,7 +65,7 @@ export function verifyDokuNotificationSignature(req: Request, secretKey: string)
 export async function handleDokuWebhook(req: Request, res: Response) {
   const secretKey = process.env.DOKU_SECRET_KEY || '';
 
-  // 1. Mandatory HMAC-SHA256 Signature Verification
+  // 1. Mandatory Cryptographic Signature Verification
   if (!verifyDokuNotificationSignature(req, secretKey)) {
     return res.status(401).json({ status: 'UNAUTHORIZED', message: 'Invalid notification signature' });
   }
@@ -89,10 +92,11 @@ export async function handleDokuWebhook(req: Request, res: Response) {
 ## Bahasa Indonesia
 
 ### Deskripsi
-Membuat endpoint webhook HTTP siap produksi untuk menerima notifikasi status pembayaran dari DOKU. Mencakup verifikasi signature HMAC-SHA256 wajib, penolakan permintaan yang tidak terverifikasi (`401 Unauthorized`), pemeriksaan idempotensi terhadap notifikasi duplikat, serta pembaruan transaksi database secara atomik.
+Membuat endpoint webhook HTTP siap produksi untuk menerima notifikasi status pembayaran dari DOKU. Mencakup verifikasi signature HMAC-SHA256 & SNAP wajib, penolakan permintaan yang tidak terverifikasi (`401 Unauthorized`), pemeriksaan idempotensi terhadap notifikasi duplikat, serta pembaruan transaksi database secara atomik.
 
 ### Kondisi Pemicu
 Aktifkan skill ini ketika pengguna mengatakan:
 - `"add DOKU webhook"`
 - `"handle DOKU callbacks"`
 - `"buat listener notifikasi DOKU"`
+

@@ -128,7 +128,26 @@ Queries real-time payment status of an invoice.
 
 ---
 
+### 6. `process_refund`
+Initiates an online refund for an existing order.
+
+**Input Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "invoice_number": { "type": "string", "description": "Target invoice number to refund" },
+    "amount": { "type": "integer", "description": "Refund amount in IDR (integer without decimals)" },
+    "reason": { "type": "string", "description": "Reason for processing the refund" }
+  },
+  "required": ["invoice_number", "amount", "reason"]
+}
+```
+
+---
+
 ## 3. Configuration Setup (`mcp_config.json`)
+
 
 To register the DOKU MCP Server in your client configuration:
 

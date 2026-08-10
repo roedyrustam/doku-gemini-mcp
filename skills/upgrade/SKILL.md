@@ -14,7 +14,7 @@ author: "Roedy Rustam"
 ## English
 
 ### Description
-Analyzes existing project codebase for DOKU integration files, compares endpoint paths and signature generation code against the latest DOKU Jokul API spec, and applies minimal non-breaking code patches.
+Analyzes existing project codebase for DOKU integration files, compares endpoint paths and signature generation code against the latest DOKU Jokul API v2 and SNAP API v1.0 specs, and applies minimal non-breaking code patches.
 
 ### Trigger Conditions
 Activate this skill when the user says:
@@ -27,12 +27,12 @@ Activate this skill when the user says:
 ### Step-by-Step Execution Protocol
 
 1. **Locate Existing DOKU Integration Files**:
-   - Search workspace for `DokuService`, `dokuClient`, `/checkout/v1/payment`, `/doku-virtual-account/v2`.
+   - Search workspace for `DokuService`, `dokuClient`, `/checkout/v1/payment`, `/doku-virtual-account/v2`, `/snap-adapter`.
 
 2. **Diff Against `.doku-spec.json` / Standard Rules**:
-   - Check endpoint path versions (`v1` vs `v2`).
-   - Check signature assembly for missing header fields.
-   - Check webhook verification formula.
+   - Check endpoint path versions (`v1` vs `v2` vs `snap-adapter`).
+   - Check signature assembly for missing header fields or trailing newlines.
+   - Check webhook verification formula (`crypto.timingSafeEqual` usage).
 
 3. **Apply Targeted Code Patches**:
    - Modify only changed functions or endpoints without breaking existing method signatures.
@@ -50,3 +50,4 @@ Aktifkan skill ini ketika pengguna mengatakan:
 - `"upgrade DOKU client"`
 - `"perbarui versi DOKU API"`
 - `"patch integrasi DOKU"`
+

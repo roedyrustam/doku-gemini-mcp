@@ -1,11 +1,11 @@
 # DOKU Gemini MCP Plugin (`doku-gemini-mcp`)
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/roedyrustam/doku-gemini-mcp)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/roedyrustam/doku-gemini-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![DOKU Jokul API](https://img.shields.io/badge/DOKU-Jokul%20API%20v2-red.svg)](https://developers.doku.com/)
+[![DOKU Jokul API](https://img.shields.io/badge/DOKU-Jokul%20v2%20%26%20SNAP%20v1.0-red.svg)](https://developers.doku.com/)
 [![MCP Spec](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-green.svg)](https://modelcontextprotocol.io/)
 
-> **Official Antigravity / Gemini Plugin & MCP Server Integration for DOKU Payment Gateway (Jokul API v2)**  
+> **Official Antigravity / Gemini Plugin & MCP Server Integration for DOKU Payment Gateway (Jokul API v2 & SNAP API v1.0)**  
 > *Panduan & Ekstensi AI Agentic Commerce untuk Integrasi DOKU Payment Gateway & Server Model Context Protocol.*
 
 [English](#english) | [Bahasa Indonesia](#bahasa-indonesia) | [Documentation Index](#documentation-index)
@@ -77,12 +77,12 @@ sequenceDiagram
 ### Overview
 `doku-gemini-mcp` is an advanced AI plugin and Model Context Protocol (MCP) server for **Google Antigravity**, **Gemini**, **Claude Desktop**, and **Cursor**. It equips AI coding assistants with end-to-end capabilities to scaffold, configure, test, sign, and maintain [DOKU Payment Gateway](https://developers.doku.com/) integrations.
 
-Whether you are implementing DOKU Checkout, Direct Virtual Accounts (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB), QRIS, E-Wallets (OVO, ShopeePay, DANA, LinkAja), Credit Cards, Direct Debit, or PayLater, this plugin provides automated agentic workflows, cryptographic HMAC-SHA256 signature generators, webhook verifiers, and production security readiness checks.
+Whether you are implementing DOKU Checkout, Direct Virtual Accounts (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB), QRIS (Jokul & SNAP), E-Wallets (OVO, ShopeePay, DANA, LinkAja), Credit Cards, Direct Debit, PayLater, or Online Refunds, this plugin provides automated agentic workflows, cryptographic HMAC-SHA256 & SNAP signature generators, webhook verifiers, and production security readiness checks.
 
 ### Key Capabilities
 - **11 Specialized Agentic Skills**: Automated stack detection, project setup, credential configuration, postman collection generation, live sandbox testing, and production audits.
-- **DOKU MCP Server**: Native Model Context Protocol server enabling AI agents to execute autonomous checkout operations (AI Agentic Commerce).
-- **Cryptographic Strictness**: Built-in HMAC-SHA256 request signature calculator and webhook notification validator adhering to DOKU Jokul API v2 specifications.
+- **DOKU MCP Server**: Native Model Context Protocol server enabling AI agents to execute autonomous checkout and refund operations (AI Agentic Commerce).
+- **Cryptographic Strictness**: Built-in HMAC-SHA256 & SNAP HMAC-SHA512 request signature calculators and webhook notification validators adhering to official DOKU specifications.
 - **Multi-Language Support**: Scaffolding code for Node.js / TypeScript, Python, Go, PHP, Java, and Rust.
 - **Production Readiness Suite**: 8-point automated pre-go-live checklist preventing security vulnerabilities and data leakage.
 
@@ -94,14 +94,15 @@ Whether you are implementing DOKU Checkout, Direct Virtual Accounts (BCA, Mandir
 ### Ringkasan
 `doku-gemini-mcp` adalah plugin AI dan server Model Context Protocol (MCP) tingkat lanjut untuk **Google Antigravity**, **Gemini**, **Claude Desktop**, dan **Cursor**. Plugin ini membekali asisten AI dengan kemampuan end-to-end untuk membuat, mengonfigurasi, menguji, menandatangani, dan memelihara integrasi [DOKU Payment Gateway](https://developers.doku.com/).
 
-Baik Anda mengimplementasikan DOKU Checkout, Virtual Account Langsung (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB), QRIS, E-Wallet (OVO, ShopeePay, DANA, LinkAja), Kartu Kredit, Direct Debit, maupun PayLater, plugin ini menyediakan alur kerja agen otomatis, generator signature HMAC-SHA256 kriptografis, verifikator webhook, dan pemeriksaan kesiapan keamanan produksi.
+Baik Anda mengimplementasikan DOKU Checkout, Virtual Account Langsung (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB), QRIS (Jokul & SNAP), E-Wallet (OVO, ShopeePay, DANA, LinkAja), Kartu Kredit, Direct Debit, PayLater, maupun Online Refund, plugin ini menyediakan alur kerja agen otomatis, generator signature HMAC-SHA256 & SNAP kriptografis, verifikator webhook, dan pemeriksaan kesiapan keamanan produksi.
 
 ### Fitur Utama
 - **11 Skill Agen Terpesialisasi**: Deteksi stack otomatis, setup proyek, konfigurasi kredensial, pembuat koleksi Postman, penguji sandbox langsung, dan audit produksi.
-- **DOKU MCP Server**: Server Model Context Protocol asli yang memungkinkan agen AI menjalankan transaksi checkout otonom (*AI Agentic Commerce*).
-- **Ketepatan Kriptografis**: Kalkulator signature permintaan HMAC-SHA256 bawaan dan validator notifikasi webhook yang mematuhi spesifikasi DOKU Jokul API v2.
+- **DOKU MCP Server**: Server Model Context Protocol asli yang memungkinkan agen AI menjalankan transaksi checkout & refund otonom (*AI Agentic Commerce*).
+- **Ketepatan Kriptografis**: Kalkulator signature permintaan HMAC-SHA256 & SNAP HMAC-SHA512 bawaan dan validator notifikasi webhook yang mematuhi spesifikasi resmi DOKU.
 - **Dukungan Multi-Bahasa**: Kode scaffolding untuk Node.js / TypeScript, Python, Go, PHP, Java, dan Rust.
 - **Rangkaian Kesiapan Produksi**: 8 poin checklist otomatis sebelum *go-live* untuk mencegah kerentanan keamanan dan kebocoran data.
+
 
 ---
 
@@ -292,6 +293,8 @@ Enable your AI assistant (Antigravity, Gemini, Claude Desktop, Cursor) to execut
 - `create_qris_payment`: Generate dynamic QRIS payment codes & QR images.
 - `create_ewallet_payment`: Initiate E-Wallet charges (OVO, ShopeePay, DANA, LinkAja).
 - `check_transaction_status`: Query payment invoice status from DOKU API.
+- `process_refund`: Initiate online refunds for paid orders.
+
 
 ### Configuration (`mcp_config.json`)
 ```json

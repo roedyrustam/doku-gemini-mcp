@@ -57,14 +57,15 @@ This guide provides an in-depth reference for all 11 specialized agentic skills 
 
 ### 4. `doku-payment-gateway`
 - **Location**: `skills/doku-payment-gateway/SKILL.md`
-- **Description**: Technical reference guide for DOKU Jokul API v2 integration.
+- **Description**: Technical reference guide for DOKU Jokul API v2 & SNAP API v1.0 integration.
 - **Coverage**:
   - **DOKU Checkout**: Payment link creation `/checkout/v1/payment`.
   - **Virtual Account (VA)**: Direct VA generation `/doku-virtual-account/v2/payment-code` (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB).
-  - **QRIS**: Dynamic QR code generation `/qris/v1/payment-code`.
+  - **QRIS**: Dynamic QR code generation `/qris/v1/payment-code` (Jokul) & `/snap-adapter/b2b/v1.0/qr/qr-mpm-generate` (SNAP).
   - **E-Wallet**: Charge initiation `/e-wallet/v1/payment` (OVO, ShopeePay, DANA, LinkAja).
   - **Credit Card**: Tokenization & 3D Secure payment `/credit-card/v1/payment`.
   - **Check Status**: Transaction inquiry `/orders/v1/status/:invoice_number`.
+  - **Online Refund**: Refund initiation `/orders/v1/refund`.
 
 ---
 
@@ -72,7 +73,7 @@ This guide provides an in-depth reference for all 11 specialized agentic skills 
 - **Location**: `skills/webhook-receiver/SKILL.md`
 - **Description**: Scaffolds HTTP Webhook notification handler endpoints.
 - **Key Features**:
-  - HMAC-SHA256 signature verification on incoming request headers.
+  - Cryptographic signature verification (Jokul HMAC-SHA256 & SNAP `X-SIGNATURE`).
   - Uses `crypto.timingSafeEqual` to prevent timing attack vulnerabilities.
   - Implements atomic database check to ensure idempotent processing (prevents double fulfillment).
 
@@ -87,6 +88,7 @@ This guide provides an in-depth reference for all 11 specialized agentic skills 
   - `create_qris_payment`
   - `create_ewallet_payment`
   - `check_transaction_status`
+  - `process_refund`
 
 ---
 
@@ -110,10 +112,11 @@ This guide provides an in-depth reference for all 11 specialized agentic skills 
 
 ### 10. `fetch-api-spec`
 - **Location**: `skills/fetch-api-spec/SKILL.md`
-- **Description**: Fetches and structures official API specs from `developers.doku.com` for offline local reference.
+- **Description**: Fetches and structures official API specs from `developers.doku.com` for offline local reference, covering Jokul v2 and SNAP v1.0.
 
 ---
 
 ### 11. `upgrade`
 - **Location**: `skills/upgrade/SKILL.md`
-- **Description**: Diffs current implementation against latest DOKU API spec versions and safely applies non-breaking patches.
+- **Description**: Diffs current implementation against latest DOKU API spec versions (Jokul v2 & SNAP v1.0) and safely applies non-breaking patches.
+

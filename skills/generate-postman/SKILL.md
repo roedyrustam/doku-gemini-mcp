@@ -34,7 +34,7 @@ const timestamp = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
 const targetPath = pm.request.url.getPath();
 
 let digest = "";
-if (pm.request.body && pm.request.body.raw) {
+if (pm.request.body && pm.request.body.raw && ["POST", "PUT", "PATCH"].includes(pm.request.method)) {
     const rawBody = pm.request.body.raw;
     const hash = CryptoJS.SHA256(rawBody);
     digest = CryptoJS.enc.Base64.stringify(hash);
@@ -69,3 +69,4 @@ Aktifkan skill ini ketika pengguna mengatakan:
 - `"generate Postman collection"`
 - `"ekspor Postman DOKU"`
 - `"buat koleksi Postman untuk DOKU"`
+

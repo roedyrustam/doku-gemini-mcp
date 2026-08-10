@@ -49,7 +49,8 @@ Activate this skill when the user says:
      },
      "doku": {
        "isProduction": false,
-       "apiVersion": "v2"
+       "apiVersion": "v2",
+       "snapVersion": "v1.0"
      }
    }
    ```
@@ -69,3 +70,4 @@ Aktifkan skill ini ketika pengguna mengatakan:
 - `"detect stack"`
 - `"periksa framework proyek untuk DOKU"`
 - `"identifikasi tech stack"`
+
