@@ -7,6 +7,11 @@
   },
   "repository": "https://github.com/roedyrustam/doku-gemini-mcp.git",
   "license": "MIT",
+  "rules": [
+    "AGENTS.md",
+    "rules/doku-security-rules.md",
+    "rules/mcp-tool-rules.md"
+  ],
   "keywords": [
     "doku",
     "payment-gateway",
@@ -26,4 +31,5 @@
     "webhook"
   ]
 }
+
 

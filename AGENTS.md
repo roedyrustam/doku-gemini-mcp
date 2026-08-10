@@ -1,6 +1,6 @@
 # Antigravity Rules for `doku-gemini-mcp` Plugin
 
-This document specifies mandatory rules, security requirements, signature formulas, and MCP tool design standards for agents interacting with DOKU Payment Gateway integrations and DOKU MCP Servers based on official [developers.doku.com](https://developers.doku.com/) documentation.
+This document specifies mandatory rules, security requirements, signature formulas, and MCP tool design standards for agents interacting with DOKU Payment Gateway integrations (Jokul API v2 & SNAP API v1.0) and DOKU MCP Servers based on official [developers.doku.com](https://developers.doku.com/) documentation.
 
 ---
 
@@ -12,6 +12,8 @@ This document specifies mandatory rules, security requirements, signature formul
 ---
 
 ## 2. Signature Calculation Strictness
+
+### Jokul API v2 Standard
 - Mandatory HTTP Request Headers:
   - `Client-Id`: Merchant Client ID from DOKU Back Office.
   - `Request-Id`: Unique UUID v4 per HTTP request.
@@ -27,10 +29,18 @@ This document specifies mandatory rules, security requirements, signature formul
 - **NEVER** add a trailing newline (`\n`) at the end of the raw component string.
 - For `GET` requests (e.g. Check Status API `/orders/v1/status/:invoice_number`), completely omit `\nDigest:<DIGEST_STRING>` from component assembly.
 
+### SNAP API v1.0 Standard
+- Mandatory SNAP Headers: `X-TIMESTAMP`, `X-SIGNATURE`, `X-CLIENT-KEY`, `X-PARTNER-ID`, `X-EXTERNAL-ID`, `CHANNEL-ID`.
+- Symmetric String to Sign Assembly:
+  ```text
+  HTTPMethod + ":" + EndpointUrl + ":" + AccessToken + ":" + Lowercase(HexEncode(SHA-256(MinifiedRequestBody))) + ":" + Timestamp
+  ```
+- Signature calculation uses HMAC-SHA512 with the Secret Key.
+
 ---
 
 ## 3. Webhook Signature Verification & Idempotency
-- ALL incoming HTTP webhook notifications from DOKU **MUST** be cryptographically verified using HMAC-SHA256 before updating database or order status.
+- ALL incoming HTTP webhook notifications from DOKU **MUST** be cryptographically verified using HMAC-SHA256 / SNAP `X-SIGNATURE` before updating database or order status.
 - Unverified requests **MUST** be immediately rejected with HTTP `401 Unauthorized`.
 - Use timing-safe string comparison (`crypto.timingSafeEqual`) when validating incoming signature headers to prevent timing side-channel attacks.
 - Prevent duplicate webhook processing by performing atomic database transaction checks before triggering order fulfillment.
@@ -43,3 +53,4 @@ This document specifies mandatory rules, security requirements, signature formul
 - Monetary amount inputs **MUST** be specified as IDR integers without decimal places unless required by specific bank channel rules.
 - MCP Tools **MUST** catch network and API authorization errors gracefully without leaking raw stack traces to the LLM context.
 - DOKU MCP Servers **MUST** default to `DOKU_IS_PRODUCTION=false` (Sandbox) unless explicitly configured for production deployment.
+

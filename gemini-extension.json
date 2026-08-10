@@ -4,6 +4,12 @@
   "version": "1.1.0",
   "author": {
     "name": "Roedy Rustam"
-  }
+  },
+  "rules": [
+    "AGENTS.md",
+    "rules/doku-security-rules.md",
+    "rules/mcp-tool-rules.md"
+  ]
 }
+
 

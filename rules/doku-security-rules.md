@@ -6,17 +6,21 @@
 - Keep separate credentials for **Sandbox** (`https://api-sandbox.doku.com`) and **Production** (`https://api.doku.com`).
 
 ## 2. Signature Calculation Strictness
-- Component String Assembly MUST strictly follow:
+- **Jokul v2**: Component String Assembly MUST strictly follow:
   `Client-Id:<CLIENT_ID>\nRequest-Id:<REQUEST_ID>\nRequest-Timestamp:<TIMESTAMP>\nRequest-Target:<TARGET_PATH>\nDigest:<DIGEST_STRING>`
 - NEVER add a trailing newline (`\n`) at the end of the raw component string.
 - Timestamp format MUST be UTC ISO8601 string without milliseconds, e.g., `2026-08-07T13:00:00Z` (`new Date().toISOString().replace(/\.\d{3}Z$/, 'Z')`).
 - For `GET` requests, completely omit the `\nDigest:...` portion of the signature component.
+- **SNAP v1.0**: Symmetric String to Sign Assembly MUST follow:
+  `HTTPMethod + ":" + EndpointUrl + ":" + AccessToken + ":" + Lowercase(HexEncode(SHA-256(MinifiedRequestBody))) + ":" + Timestamp` signed using HMAC-SHA512.
 
 ## 3. Mandatory Webhook Signature Verification
-- ALL incoming HTTP webhook notifications from DOKU MUST be cryptographically verified using HMAC-SHA256 before updating database or transaction status.
+- ALL incoming HTTP webhook notifications from DOKU MUST be cryptographically verified using HMAC-SHA256 or SNAP `X-SIGNATURE` before updating database or transaction status.
 - Unverified requests MUST be immediately rejected with HTTP `401 Unauthorized`.
+- Use timing-safe string comparison (`crypto.timingSafeEqual`) when validating incoming signature headers to prevent timing side-channel attacks.
 
 ## 4. Webhook Idempotency & Data Leakage Prevention
 - Save transaction invoice status checks in an atomic database transaction.
 - Prevent duplicate webhook processing by checking existing payment status before executing order fulfillment.
 - Sanitize payload logs to prevent sensitive customer PII or API secret key leakage into stdout/application logs.
+
