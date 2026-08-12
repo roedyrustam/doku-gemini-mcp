@@ -37,7 +37,7 @@ Activate this skill when the user says:
    - Online Refund API: `/orders/v1/refund`
 
 2. **Validate Mandatory Headers Standard**:
-   - Jokul v2: `Client-Id`, `Request-Id`, `Request-Timestamp`, `Request-Target`, `Digest`, `Signature`.
+   - Jokul v2: `Client-Id`, `Request-Id`, `Request-Timestamp`, `Signature`. (Note: `Request-Target` and `Digest` are used for Signature string, NOT as headers).
    - SNAP v1.0: `X-TIMESTAMP`, `X-SIGNATURE`, `X-CLIENT-KEY`, `X-PARTNER-ID`, `X-EXTERNAL-ID`, `CHANNEL-ID`.
 
 3. **Generate Local Spec Cache (`.doku-spec.json`)**:

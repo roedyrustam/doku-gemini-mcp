@@ -18,9 +18,9 @@ This document specifies mandatory rules, security requirements, signature formul
   - `Client-Id`: Merchant Client ID from DOKU Back Office.
   - `Request-Id`: Unique UUID v4 per HTTP request.
   - `Request-Timestamp`: UTC ISO8601 string without milliseconds, e.g. `2026-08-09T00:00:00Z` (`new Date().toISOString().replace(/\.\d{3}Z$/, 'Z')`).
-  - `Request-Target`: Endpoint target path (e.g. `/checkout/v1/payment` or `/doku-virtual-account/v2/payment-code`).
-  - `Digest`: Base64 encoded SHA-256 hash of JSON request body (Omitted for `GET` requests).
   - `Signature`: Format `HMACSHA256=<base64-signature>`.
+
+- **Note**: `Request-Target` and `Digest` are used **only** for Signature calculation component string. Do **NOT** send them as HTTP Request Headers.
 
 - Component String Assembly **MUST** strictly follow:
   ```text

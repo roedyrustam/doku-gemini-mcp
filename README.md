@@ -189,7 +189,8 @@ doku-gemini-mcp/
 │   ├── HMAC_SIGNATURE_GUIDE.md         # HMAC-SHA256 Math & Code Implementation Guide
 │   ├── MCP_SERVER_GUIDE.md             # DOKU MCP Server Architecture & Setup
 │   ├── WEBHOOK_GUIDE.md                # Webhook Verification & Idempotency Guard
-│   └── PRODUCTION_CHECKLIST.md         # 8-Point Go-Live Production Readiness Audit
+│   ├── PRODUCTION_CHECKLIST.md         # 8-Point Go-Live Production Readiness Audit
+│   └── FRONTEND_INTEGRATION_GUIDE.md   # DOKU Checkout JS Popup & Redirect Integration
 ├── rules/                              # Modular Rules
 │   ├── doku-security-rules.md          # Security & Credentials Guardrails
 │   └── mcp-tool-rules.md               # MCP Tool Design Standards
@@ -235,9 +236,9 @@ DOKU Payment Gateway requires cryptographic HMAC-SHA256 HTTP headers for all req
 - `Client-Id`: Merchant Client ID from DOKU Back Office.
 - `Request-Id`: Unique UUID v4 string per request.
 - `Request-Timestamp`: UTC ISO8601 string **without milliseconds** (e.g. `2026-08-09T00:00:00Z`).
-- `Request-Target`: Target URI path (e.g. `/checkout/v1/payment` or `/doku-virtual-account/v2/payment-code`).
-- `Digest`: Base64 encoded SHA-256 hash of raw JSON body (Omitted for `GET` requests).
 - `Signature`: Format `HMACSHA256=<base64-signature>`.
+
+*Note: `Request-Target` and `Digest` are used only for Signature calculation component string, NOT as HTTP Request Headers.*
 
 ### 2. Signature Assembly String Formula
 ```text
@@ -329,6 +330,8 @@ Explore detailed technical guides in the [`docs/`](file:///c:/Users/roedy/.gemin
    Cryptographic signature verification on HTTP notifications, timing-safe equality, atomic database transactions, and idempotency guards.
 5. 🚀 [**Production Readiness Checklist (`PRODUCTION_CHECKLIST.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/PRODUCTION_CHECKLIST.md)  
    8-point audit covering credential isolation, HTTPS enforcement, PII log sanitization, rate limiting, and go-live deployment.
+6. 🌐 [**Frontend Integration Guide (`FRONTEND_INTEGRATION_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/FRONTEND_INTEGRATION_GUIDE.md)  
+   Integrating the DOKU Checkout JS library for pop-up UI mode and frontend redirect handling.
 
 ---
 

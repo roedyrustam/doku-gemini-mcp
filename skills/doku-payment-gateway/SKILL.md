@@ -20,6 +20,7 @@ Expert guide for implementing DOKU Payment Gateway (Jokul API v2 & SNAP API v1.0
 Activate this skill when the user is:
 - Building or refactoring DOKU Payment Gateway integration in Node.js, TypeScript, Python, Go, PHP, or Java.
 - Implementing HMAC-SHA256 signature calculations or notification signature verification for DOKU API.
+- Integrating DOKU Checkout JS library (`jokul-checkout.js`) on the frontend for pop-up or redirect modes.
 - Setting up DOKU Checkout, Virtual Account (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB), QRIS, E-Wallet (OVO, ShopeePay, DANA, LinkAja), Credit Card, Direct Debit, or PayLater (Kredivo, Indodana, Akulaku) APIs.
 - Setting up Account Binding, Direct Debit recurring payments, or Online Refunds.
 - Querying order status via `/orders/v1/status/:invoice_number` or SNAP query endpoints.
@@ -39,9 +40,9 @@ Activate this skill when the user is:
 - `Client-Id`: Merchant Client ID from DOKU Back Office.
 - `Request-Id`: Unique UUID v4 per HTTP request.
 - `Request-Timestamp`: UTC ISO8601 string without milliseconds (e.g. `2026-08-09T00:00:00Z`).
-- `Request-Target`: Endpoint target path (e.g. `/checkout/v1/payment` or `/doku-virtual-account/v2/payment-code`).
-- `Digest`: Base64 encoded SHA-256 hash of JSON payload string (Omitted for `GET` requests).
 - `Signature`: Format `HMACSHA256=<base64-signature>`.
+
+*Note: `Request-Target` and `Digest` are used only for Signature calculation component string, NOT as HTTP Request Headers.*
 
 #### Mandatory Headers (SNAP BI / SNAP Adapter Standard)
 - `X-TIMESTAMP`: UTC ISO8601 string with offset (e.g. `2026-08-09T00:00:00+07:00`).
@@ -50,6 +51,12 @@ Activate this skill when the user is:
 - `X-PARTNER-ID`: Merchant Client ID.
 - `X-EXTERNAL-ID`: Unique trace ID per request.
 - `CHANNEL-ID`: Channel identification header.
+
+#### Frontend Integration (DOKU Checkout JS)
+- **Viewport**: Requires `<meta name="viewport" content="width=device-width, initial-scale=1">`
+- **JS Script (Sandbox)**: `<script src="https://sandbox.doku.com/jokul-checkout-js/v1/jokul-checkout-1.0.0.js"></script>`
+- **JS Script (Production)**: `<script src="https://jokul.doku.com/jokul-checkout-js/v1/jokul-checkout-1.0.0.js"></script>`
+- **Invokation**: `loadJokulCheckout(payment.url)`
 
 ---
 

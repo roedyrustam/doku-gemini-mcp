@@ -51,8 +51,6 @@ const signature = "HMACSHA256=" + CryptoJS.enc.Base64.stringify(hmac);
 pm.request.headers.add({ key: "Client-Id", value: clientId });
 pm.request.headers.add({ key: "Request-Id", value: requestId });
 pm.request.headers.add({ key: "Request-Timestamp", value: timestamp });
-pm.request.headers.add({ key: "Request-Target", value: targetPath });
-if (digest) pm.request.headers.add({ key: "Digest", value: digest });
 pm.request.headers.add({ key: "Signature", value: signature });
 ```
 

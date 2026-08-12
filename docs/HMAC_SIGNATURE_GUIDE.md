@@ -6,16 +6,16 @@ This guide details the exact cryptographic signature formulas and implementation
 
 ## 1. Authentication Headers Overview
 
-Every HTTP request to DOKU Payment Gateway endpoints must include six mandatory HTTP headers:
+Every HTTP request to DOKU Payment Gateway endpoints must include four mandatory HTTP headers:
 
 | Header Name | Type | Description / Format | Example Value |
 |---|---|---|---|
 | `Client-Id` | String | Merchant Client ID from DOKU Back Office | `MCH-12345678` |
 | `Request-Id` | String | Unique UUID v4 per HTTP request | `f47ac10b-58cc-4372-a567-0e02b2c3d479` |
 | `Request-Timestamp` | String | UTC ISO8601 timestamp **without milliseconds** | `2026-08-09T02:00:00Z` |
-| `Request-Target` | String | API Target endpoint path (including query params if any) | `/checkout/v1/payment` |
-| `Digest` | String | Base64-encoded SHA-256 hash of raw JSON body *(Omitted for `GET`)* | `47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=` |
 | `Signature` | String | Signature formatted as `HMACSHA256=<base64-signature>` | `HMACSHA256=w4nN9...` |
+
+*Note: `Request-Target` and `Digest` are used only to construct the Signature string. They are NOT sent as HTTP headers.*
 
 ---
 
