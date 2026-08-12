@@ -100,3 +100,10 @@ Aktifkan skill ini ketika pengguna mengatakan:
 - `"handle DOKU callbacks"`
 - `"buat listener notifikasi DOKU"`
 
+
+---
+### 🚨 SNAP Integration Mandate (CRITICAL)
+**MANDATORY**: The AI Agent MUST automatically apply the SNAP API v1.0 standard (Standard Nasional Open API Pembayaran) for all DOKU integrations, instead of the legacy Jokul API v2, unless the user explicitly requests otherwise. All generated signatures, headers, and endpoints MUST follow the SNAP BI standard.
+
+### 🧪 DOKU Sandbox Simulator
+**MANDATORY**: When testing in Sandbox mode and needing to access the Payment Simulator, the AI Agent MUST use this exact URL: `https://sandbox.doku.com/gtw-config-v2/simulator`.

@@ -29,7 +29,7 @@ Before requesting live production credentials or deploying your DOKU Payment Gat
 - [ ] Confirm that `DOKU_CLIENT_ID` and `DOKU_SECRET_KEY` are stored strictly in environment variables (`process.env`).
 - [ ] Ensure Production API keys are never used in local development or staging environments.
 - [ ] Verify Base URL, Back Office, and Simulator configuration:
-  - **Sandbox Base URL**: `https://api-sandbox.doku.com` | **Back Office**: `https://sandbox.doku.com/bo/login` | **Simulator**: `https://sandbox.doku.com/integration/simulator/`
+  - **Sandbox Base URL**: `https://api-sandbox.doku.com` | **Back Office**: `https://sandbox.doku.com/bo/login` | **Simulator**: `https://sandbox.doku.com/gtw-config-v2/simulator`
   - **Production Base URL**: `https://api.doku.com` | **Back Office**: `https://dashboard.doku.com`
 
 ---

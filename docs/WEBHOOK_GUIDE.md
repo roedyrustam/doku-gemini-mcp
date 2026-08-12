@@ -9,7 +9,7 @@ This guide details how to implement safe, cryptographic HTTP webhook notificatio
 When a customer completes a payment via Virtual Account, QRIS, E-Wallet, or Credit Card, DOKU's server sends an HTTP `POST` webhook notification to your configured notification URL.
 
 > [!TIP]
-> **Testing Webhooks in Sandbox**: You can simulate customer payment events and trigger live webhook notifications using the official [DOKU Integration Payment Simulator](https://sandbox.doku.com/integration/simulator/).
+> **Testing Webhooks in Sandbox**: You can simulate customer payment events and trigger live webhook notifications using the official [DOKU Integration Payment Simulator](https://sandbox.doku.com/gtw-config-v2/simulator).
 
 ```text
 ┌───────────────────────────┐                        HTTP POST Notification                        ┌───────────────────────────┐
@@ -46,16 +46,30 @@ When a customer completes a payment via Virtual Account, QRIS, E-Wallet, or Cred
 
 ## 2. Webhook Notification Headers & Signature Calculation
 
-DOKU sends the following mandatory headers on notification webhooks:
+DOKU sends different headers depending on whether the notification is for the Jokul API v2 or SNAP API v1.0.
 
+### Jokul API v2 Webhook Headers
 - `Client-Id`: Merchant Client ID.
 - `Request-Id`: Unique UUID string for this notification event.
 - `Request-Timestamp`: UTC ISO8601 timestamp string.
 - `Signature`: Notification signature string (`HMACSHA256=<base64-signature>`).
 
-### Component String for Webhook Signature Verification
+**Jokul Component String for Webhook Verification:**
 ```text
 Client-Id:<CLIENT_ID>\nRequest-Id:<REQUEST_ID>\nRequest-Timestamp:<TIMESTAMP>\nRequest-Target:<TARGET_PATH>\nDigest:<DIGEST_STRING>
+```
+
+### SNAP API v1.0 Webhook Headers
+- `X-TIMESTAMP`: UTC ISO8601 string with offset.
+- `X-SIGNATURE`: Notification signature string.
+- `X-CLIENT-KEY`: Merchant Client ID.
+- `X-PARTNER-ID`: Merchant Client ID.
+- `X-EXTERNAL-ID`: Unique trace ID per request.
+- `CHANNEL-ID`: Channel identification.
+
+**SNAP Component String for Webhook Verification (Symmetric):**
+```text
+HTTPMethod + ":" + EndpointUrl + ":" + AccessToken + ":" + Lowercase(HexEncode(SHA-256(MinifiedRequestBody))) + ":" + Timestamp
 ```
 
 ---

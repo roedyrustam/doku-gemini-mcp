@@ -33,7 +33,7 @@ Activate this skill when the user is:
 #### Environment Gateways & Testing Tools
 | Environment | Base URL | Dashboard / Back Office | Payment Simulator |
 |---|---|---|---|
-| **Sandbox** | `https://api-sandbox.doku.com` | `https://sandbox.doku.com/bo/login` | `https://sandbox.doku.com/integration/simulator/` |
+| **Sandbox** | `https://api-sandbox.doku.com` | `https://sandbox.doku.com/bo/login` | `https://sandbox.doku.com/gtw-config-v2/simulator` |
 | **Production** | `https://api.doku.com` | `https://dashboard.doku.com` | N/A |
 
 #### Mandatory Headers (Jokul API v2 Standard)
@@ -117,3 +117,10 @@ Aktifkan skill ini ketika pengguna sedang:
 - Mengatur API Checkout, Virtual Account, QRIS, E-Wallet, Kartu Kredit, Direct Debit, PayLater, atau Refund.
 - Memeriksa status transaksi via `/orders/v1/status/:invoice_number` atau endpoint SNAP.
 
+
+---
+### 🚨 SNAP Integration Mandate (CRITICAL)
+**MANDATORY**: The AI Agent MUST automatically apply the SNAP API v1.0 standard (Standard Nasional Open API Pembayaran) for all DOKU integrations, instead of the legacy Jokul API v2, unless the user explicitly requests otherwise. All generated signatures, headers, and endpoints MUST follow the SNAP BI standard.
+
+### 🧪 DOKU Sandbox Simulator
+**MANDATORY**: When testing in Sandbox mode and needing to access the Payment Simulator, the AI Agent MUST use this exact URL: `https://sandbox.doku.com/gtw-config-v2/simulator`.

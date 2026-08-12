@@ -171,7 +171,7 @@ To enable **AI Agentic Commerce** (allowing the AI agent to generate payment lin
 
 > [!TIP]
 > Retrieve your Sandbox Client ID and Secret Key from [DOKU Sandbox Back Office](https://sandbox.doku.com/bo/login).  
-> Test payments and webhooks using [DOKU Integration Payment Simulator](https://sandbox.doku.com/integration/simulator/).
+> Test payments and webhooks using [DOKU Integration Payment Simulator](https://sandbox.doku.com/gtw-config-v2/simulator).
 
 ---
 
@@ -322,8 +322,8 @@ Explore detailed technical guides in the [`docs/`](file:///c:/Users/roedy/.gemin
 
 1. 📖 [**Skills Comprehensive Guide (`SKILLS_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/SKILLS_GUIDE.md)  
    Detailed manual and trigger instructions for all 11 agentic skills.
-2. 🔐 [**HMAC Signature Deep Dive (`HMAC_SIGNATURE_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/HMAC_SIGNATURE_GUIDE.md)  
-   Mathematical breakdown, header specifications, and code implementations in TS, Python, Go, PHP, and Rust.
+2. 🔑 [**HMAC Request Signature Guide (`HMAC_SIGNATURE_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/HMAC_SIGNATURE_GUIDE.md)  
+   Detailed cryptography formulas and code implementations for Jokul API v2 (HMAC-SHA256) and SNAP API v1.0 (HMAC-SHA512) signatures.
 3. 🤖 [**MCP Server Guide (`MCP_SERVER_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/MCP_SERVER_GUIDE.md)  
    Complete guide to building, configuring, and extending the DOKU Model Context Protocol Server for AI Agentic Commerce.
 4. 🔔 [**Webhook & Anti-Replay Guide (`WEBHOOK_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/WEBHOOK_GUIDE.md)  

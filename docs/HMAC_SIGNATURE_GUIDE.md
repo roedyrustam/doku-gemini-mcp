@@ -1,6 +1,6 @@
-# DOKU HMAC-SHA256 Request Signature Guide
+# DOKU HMAC Request Signature Guide (Jokul & SNAP)
 
-This guide details the exact cryptographic signature formulas and implementations required for authenticating requests to DOKU Payment Gateway (Jokul API v2).
+This guide details the exact cryptographic signature formulas and implementations required for authenticating requests to DOKU Payment Gateway via both the Jokul API v2 (HMAC-SHA256) and the SNAP API v1.0 (HMAC-SHA512).
 
 ---
 
@@ -101,6 +101,25 @@ export function generateDokuSignature(params: DokuSignatureParams): { digest?: s
     signature: `HMACSHA256=${base64Signature}`
   };
 }
+
+export interface SnapSignatureParams {
+  httpMethod: string;
+  endpointUrl: string; // e.g. "/snap-adapter/b2b/v1.0/qr/qr-mpm-generate"
+  accessToken: string;
+  body?: object;
+  timestamp: string; // ISO8601 with offset, e.g. "2026-08-09T00:00:00+07:00"
+  secretKey: string;
+}
+
+export function generateSnapSignature(params: SnapSignatureParams): string {
+  const jsonBody = params.body ? JSON.stringify(params.body) : '';
+  const hash = crypto.createHash('sha256').update(jsonBody, 'utf8').digest('hex').toLowerCase();
+  
+  const componentStr = `${params.httpMethod}:${params.endpointUrl}:${params.accessToken}:${hash}:${params.timestamp}`;
+  const hmac = crypto.createHmac('sha512', params.secretKey);
+  hmac.update(componentStr, 'utf8');
+  return hmac.digest('base64');
+}
 ```
 
 ### Python (3.10+)
@@ -143,6 +162,26 @@ def generate_doku_signature(
     )
     raw_signature = base64.b64encode(hmac_obj.digest()).decode('utf-8')
     return digest_str, f"HMACSHA256={raw_signature}"
+
+def generate_snap_signature(
+    http_method: str,
+    endpoint_url: str,
+    access_token: str,
+    timestamp: str,
+    secret_key: str,
+    body: Optional[Dict[str, Any]] = None
+) -> str:
+    json_bytes = json.dumps(body, separators=(',', ':')).encode('utf-8') if body else b''
+    body_hash = hashlib.sha256(json_bytes).hexdigest().lower()
+    
+    component_str = f"{http_method}:{endpoint_url}:{access_token}:{body_hash}:{timestamp}"
+    
+    hmac_obj = hmac.new(
+        secret_key.encode('utf-8'),
+        component_str.encode('utf-8'),
+        hashlib.sha512
+    )
+    return base64.b64encode(hmac_obj.digest()).decode('utf-8')
 ```
 
 ### Go (1.20+)
@@ -152,9 +191,12 @@ package doku
 import (
 	"crypto/hmac"
 	"crypto/sha256"
+	"crypto/sha512"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 type SignatureResult struct {
@@ -194,6 +236,31 @@ function GenerateDokuSignature(
 		Digest:    digestStr,
 		Signature: signature,
 	}, nil
+}
+
+func GenerateSnapSignature(
+	httpMethod, endpointUrl, accessToken, timestamp, secretKey string,
+	body interface{},
+) (string, error) {
+	var jsonBytes []byte
+	var err error
+	if body != nil {
+		jsonBytes, err = json.Marshal(body)
+		if err != nil {
+			return "", err
+		}
+	} else {
+		jsonBytes = []byte("")
+	}
+	
+	hash := sha256.Sum256(jsonBytes)
+	hashHex := strings.ToLower(hex.EncodeToString(hash[:]))
+	
+	componentStr := fmt.Sprintf("%s:%s:%s:%s:%s", httpMethod, endpointUrl, accessToken, hashHex, timestamp)
+	
+	h := hmac.New(sha512.New, []byte(secretKey))
+	h.Write([]byte(componentStr))
+	return base64.StdEncoding.EncodeToString(h.Sum(nil)), nil
 }
 ```
 
