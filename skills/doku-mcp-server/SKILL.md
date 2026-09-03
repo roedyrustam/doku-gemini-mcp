@@ -29,6 +29,7 @@ Activate this skill when the user is:
 | MCP Tool Name | Description | Required Parameters |
 |---|---|---|
 | `create_checkout_payment` | Generates DOKU Checkout Payment Link | `amount`, `invoice_number`, `customer_name`, `customer_email` |
+| `cancel_checkout_order` | Cancels unpaid DOKU Checkout order | `invoice_number`, `original_request_id`, `note` |
 | `create_virtual_account` | Generates bank Virtual Account number | `bank_code`, `amount`, `invoice_number`, `customer_name` |
 | `create_qris_payment` | Generates dynamic QRIS code | `amount`, `invoice_number`, `store_name` |
 | `create_ewallet_payment` | Initiates E-Wallet payment | `channel`, `amount`, `invoice_number`, `phone_number` |

@@ -94,12 +94,13 @@ Activate this skill when the user is:
 | Channel / Feature | Endpoint | Method | Key Parameters |
 |---|---|---|---|
 | **DOKU Checkout** | `/checkout/v1/payment` | POST | `order.amount`, `order.invoice_number`, `customer.name`, `customer.email` |
+| **Cancel Checkout Order** | `/checkout/v3/cancellations` | POST | `order.invoice_number`, `payment.original_request_id`, `note` |
 | **Virtual Account** | `/doku-virtual-account/v2/payment-code` | POST | `order.amount`, `order.invoice_number`, `virtual_account_info.billing_type` |
 | **QRIS (Jokul)** | `/qris/v1/payment-code` | POST | `order.amount`, `order.invoice_number`, `qris_info.header_title` |
 | **QRIS (SNAP)** | `/snap-adapter/b2b/v1.0/qr/qr-mpm-generate` | POST | `partnerReferenceNo`, `amount.value`, `merchantId` |
 | **E-Wallet** | `/e-wallet/v1/payment` | POST | `order.amount`, `order.invoice_number`, `e_wallet_info.channel` |
 | **Credit Card** | `/credit-card/v1/payment` | POST | `order.amount`, `card.token_id`, `card.three_ds` |
-| **Check Status** | `/orders/v1/status/:invoice_number` | GET | `invoice_number` path param |
+| **Check Status** | `/orders/v1/status/:invoice_number` | GET | `invoice_number` path param (returns `order.status` & `transaction.status`) |
 | **Online Refund** | `/orders/v1/refund` | POST | `invoice_number`, `amount`, `reason` |
 
 ---

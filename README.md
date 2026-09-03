@@ -1,6 +1,6 @@
 # DOKU Gemini MCP Plugin (`doku-gemini-mcp`)
 
-[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/roedyrustam/doku-gemini-mcp)
+[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/roedyrustam/doku-gemini-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![DOKU Jokul API](https://img.shields.io/badge/DOKU-Jokul%20v2%20%26%20SNAP%20v1.0-red.svg)](https://developers.doku.com/)
 [![MCP Spec](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-green.svg)](https://modelcontextprotocol.io/)
@@ -185,7 +185,8 @@ doku-gemini-mcp/
 ├── gemini-extension.json               # Gemini Extension Specification
 ├── mcp_config.json                     # MCP Client Configuration Template
 ├── docs/                               # Deep-Dive Technical Guides
-│   ├── SKILLS_GUIDE.md                 # Complete Guide to all 11 Skills
+│   ├── DOKU_CHECKOUT_GUIDE.md          # Complete DOKU Checkout Integration Guide
+│   ├── SKILLS_GUIDE.md                 # Complete Guide to all 12 Skills
 │   ├── HMAC_SIGNATURE_GUIDE.md         # HMAC-SHA256 Math & Code Implementation Guide
 │   ├── MCP_SERVER_GUIDE.md             # DOKU MCP Server Architecture & Setup
 │   ├── WEBHOOK_GUIDE.md                # Webhook Verification & Idempotency Guard
@@ -194,10 +195,11 @@ doku-gemini-mcp/
 ├── rules/                              # Modular Rules
 │   ├── doku-security-rules.md          # Security & Credentials Guardrails
 │   └── mcp-tool-rules.md               # MCP Tool Design Standards
-└── skills/                             # 11 Specialized Agentic Skills
+└── skills/                             # 12 Specialized Agentic Skills
     ├── setup-project/                  # Main entry point for project scaffolding
     ├── detect-stack/                   # Programming language & framework detector
     ├── setup-credentials/              # Secure DOKU credential setup
+    ├── doku-checkout/                  # Dedicated DOKU Checkout reference guide
     ├── doku-payment-gateway/           # Core Jokul API v2 reference guide
     ├── webhook-receiver/               # HTTP Webhook listener generator
     ├── doku-mcp-server/                # DOKU MCP Agentic Commerce server guide
@@ -217,6 +219,7 @@ doku-gemini-mcp/
 | [`setup-project`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/setup-project/SKILL.md) | Main entry point — scaffolds complete DOKU Payment Gateway integration | Node, Python, Go, PHP, Java |
 | [`detect-stack`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/detect-stack/SKILL.md) | Detects language, framework, ORM, and environment structure | All Stacks |
 | [`setup-credentials`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/setup-credentials/SKILL.md) | Safely configures DOKU Client ID, Secret Key, and Environment | `.env`, Config Files |
+| [`doku-checkout`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/doku-checkout/SKILL.md) | Dedicated guide for DOKU Checkout, popup/redirect UI, and Cancel Order API | All APIs & Frontends |
 | [`doku-payment-gateway`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/doku-payment-gateway/SKILL.md) | Primary reference for Jokul API v2, endpoints, and HMAC signatures | All APIs |
 | [`webhook-receiver`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/webhook-receiver/SKILL.md) | Scaffolds webhook endpoint with signature verification & anti-replay idempotency | Express, Fastify, FastAPI, Gin |
 | [`doku-mcp-server`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/doku-mcp-server/SKILL.md) | Configures DOKU MCP server for AI Agentic Commerce | TypeScript, Python |
