@@ -1,7 +1,7 @@
-﻿# DOKU Gemini MCP â€” Design & Skill Orchestration Document (BLUEPRINT.md)
+# DOKU Gemini MCP â€” Design & Skill Orchestration Document (BLUEPRINT.md)
 
 **Project Name**: `doku-gemini-mcp`  
-**Version**: 1.2.0  
+**Version**: 1.3.0  
 **Status**: Ready for Execution  
 **Architecture**: Full-Stack MCP Engine (TypeScript + tsup + Vitest)  
 **Author**: Roedy Rustam  

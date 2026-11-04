@@ -35,7 +35,7 @@ async function main() {
   const env = client.getEnvironment();
 
   // Diagnostic output strictly on stderr to preserve Stdio JSON-RPC on stdout
-  console.error('[doku-gemini-mcp] Starting DOKU MCP Server v1.2.0');
+  console.error('[doku-gemini-mcp] Starting DOKU MCP Server v1.3.0');
   console.error(
     `[doku-gemini-mcp] Mode: ${env.isProduction ? 'PRODUCTION (LIVE)' : 'SANDBOX'}`
   );
@@ -50,7 +50,7 @@ async function main() {
   const server = new Server(
     {
       name: 'doku-gemini-mcp',
-      version: '1.2.0',
+      version: '1.3.0',
     },
     {
       capabilities: {

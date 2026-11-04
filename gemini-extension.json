@@ -1,7 +1,7 @@
 {
   "name": "doku-gemini-mcp",
   "description": "Plugin kustomisasi Antigravity / Gemini untuk integrasi DOKU Payment Gateway (Jokul API v2 & SNAP API v1.0) & MCP Server",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": {
     "name": "Roedy Rustam"
   },

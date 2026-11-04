@@ -1,9 +1,10 @@
 {
   "name": "doku-gemini-mcp",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Model Context Protocol (MCP) Server and Antigravity plugin for DOKU Payment Gateway (Jokul API v2 & SNAP API v1.0)",
   "type": "module",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "bin": {
     "doku-gemini-mcp": "./dist/index.js"
   },
@@ -45,6 +46,7 @@
     "claude-desktop",
     "jokul-api",
     "snap-api",
+    "snap-bi",
     "qris",
     "virtual-account"
   ],
@@ -60,4 +62,3 @@
     "vitest": "^3.0.7"
   }
 }
-

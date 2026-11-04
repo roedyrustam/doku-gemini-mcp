@@ -1,72 +1,73 @@
-# DOKU Gemini MCP Plugin (`doku-gemini-mcp`)
+# DOKU Gemini MCP Plugin & Server (`doku-gemini-mcp`)
 
-[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/roedyrustam/doku-gemini-mcp)
+[![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)](https://github.com/roedyrustam/doku-gemini-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![DOKU Jokul API](https://img.shields.io/badge/DOKU-Jokul%20v2%20%26%20SNAP%20v1.0-red.svg)](https://developers.doku.com/)
-[![MCP Spec](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-green.svg)](https://modelcontextprotocol.io/)
+[![DOKU Jokul & SNAP BI](https://img.shields.io/badge/DOKU-Jokul%20v2%20%26%20SNAP%20BI%20v1.0-red.svg)](https://developers.doku.com/)
+[![MCP Spec](https://img.shields.io/badge/MCP-Model%20Context%20Protocol%20v1.x-green.svg)](https://modelcontextprotocol.io/)
+[![CI](https://github.com/roedyrustam/doku-gemini-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/roedyrustam/doku-gemini-mcp/actions)
 
-> **Official Antigravity / Gemini Plugin & MCP Server Integration for DOKU Payment Gateway (Jokul API v2 & SNAP API v1.0)**  
-> *Panduan & Ekstensi AI Agentic Commerce untuk Integrasi DOKU Payment Gateway & Server Model Context Protocol.*
+> **Official Antigravity / Gemini Plugin & Model Context Protocol (MCP v1.x) Server for DOKU Payment Gateway (Jokul API v2 & Bank Indonesia SNAP BI v1.0)**  
+> *Plugin & Server MCP AI Agentic Commerce untuk Integrasi DOKU Payment Gateway Resmi ([developers.doku.com](https://developers.doku.com/)).*
 
 [English](#english) | [Bahasa Indonesia](#bahasa-indonesia) | [Documentation Index](#documentation-index)
 
 ---
 
-## âš¡ 1-Command Agentic Workflow Architecture
+## ⚡ 1-Command Agentic Workflow Architecture
 
 ```text
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                                 1-COMMAND AGENTIC INTEGRATION WORKFLOW                                 â”‚
-â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-â”‚                                                                                                        â”‚
-â”‚   USER PROMPT: "Setup DOKU integration for my app"                                                     â”‚
-â”‚                                                                                                        â”‚
-â”‚        â”‚                                                                                               â”‚
-â”‚        â–¼                                                                                               â”‚
-â”‚   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    Auto-detects language, framework, & package manager                    â”‚
-â”‚   â”‚ 1. detect-stack        â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”             â”‚
-â”‚   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                                                           â”‚             â”‚
-â”‚               â”‚                                                                        â”‚             â”‚
-â”‚               â–¼                                                                        â–¼             â”‚
-â”‚   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    Injects DOKU_CLIENT_ID & DOKU_SECRET_KEY               â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”‚
-â”‚   â”‚ 2. setup-credentials   â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–ºâ”‚  .env    â”‚  â”‚
-â”‚   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                                                           â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚
-â”‚               â”‚                                                                                      â”‚
-â”‚               â–¼                                                                                      â”‚
-â”‚   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    Scaffolds DokuService with Base64 SHA-256 Digest &                      â”‚
-â”‚   â”‚ 3. setup-project       â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”             â”‚
-â”‚   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜    HMAC-SHA256 Signature calculation                      â”‚             â”‚
-â”‚               â”‚                                                                        â–¼             â”‚
-â”‚               â–¼                                                                 â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”      â”‚
-â”‚   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    Scaffolds Webhook Listener with                 â”‚ DokuService â”‚      â”‚
-â”‚   â”‚ 4. webhook-receiver    â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–ºâ””â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”˜      â”‚
-â”‚   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜    timingSafeEqual & Idempotency Guard                    â”‚             â”‚
-â”‚               â”‚                                                                        â–¼             â”‚
-â”‚               â–¼                                                                 â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”      â”‚
-â”‚   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    Executes live test request against Sandbox API  â”‚ Webhook Routeâ”‚     â”‚
-â”‚   â”‚ 5. mock-test           â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–ºâ””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜      â”‚
-â”‚   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜    Returns HTTP 200 OK & Verified Payment Link!                         â”‚
-â”‚                                                                                                        â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                 1-COMMAND AGENTIC INTEGRATION WORKFLOW                                 │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                        │
+│   USER PROMPT: "Setup DOKU integration for my app"                                                     │
+│                                                                                                        │
+│        │                                                                                               │
+│        ▼                                                                                               │
+│   ┌────────────────────────┐    Auto-detects language, framework, & package manager                    │
+│   │ 1. detect-stack        ├─────────────────────────────────────────────────────────────┐             │
+│   └───────────┬────────────┘                                                           │             │
+│               │                                                                        │             │
+│               ▼                                                                        ▼             │
+│   ┌────────────────────────┐    Injects DOKU_CLIENT_ID & DOKU_SECRET_KEY               ┌──────────┐  │
+│   │ 2. setup-credentials   ├──────────────────────────────────────────────────────────►│  .env    │  │
+│   └───────────┬────────────┘                                                           └──────────┘  │
+│               │                                                                                      │
+│               ▼                                                                                      │
+│   ┌────────────────────────┐    Scaffolds DokuService with Base64 SHA-256 Digest &                      │
+│   │ 3. setup-project       ├─────────────────────────────────────────────────────────────┐             │
+│   └───────────┬────────────┘    HMAC-SHA256 Signature calculation                      │             │
+│               │                                                                        ▼             │
+│               ▼                                                                 ┌─────────────┐      │
+│   ┌────────────────────────┐    Scaffolds Webhook Listener with                 │ DokuService │      │
+│   │ 4. webhook-receiver    ├───────────────────────────────────────────────►└──────┬──────┘      │
+│   └───────────┬────────────┘    timingSafeEqual & Idempotency Guard                    │             │
+│               │                                                                        ▼             │
+│               ▼                                                                 ┌─────────────┐      │
+│   ┌────────────────────────┐    Executes live test request against Sandbox API  │ Webhook Route│     │
+│   │ 5. mock-test           ├───────────────────────────────────────────────────►└─────────────┘      │
+│   └────────────────────────┘    Returns HTTP 200 OK & Verified Payment Link!                         │
+│                                                                                                        │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Developer as ðŸ§‘â€ðŸ’» Developer
-    participant Agent as ðŸ¤– Antigravity / Gemini AI Agent
-    participant Plugin as ðŸ”Œ doku-gemini-mcp Plugin
-    participant DOKU as ðŸ¦ DOKU Payment Gateway (Sandbox)
+    actor Developer as 🧑‍💻 Developer
+    participant Agent as 🤖 Antigravity / Gemini AI Agent
+    participant Plugin as 🔌 doku-gemini-mcp Plugin
+    participant DOKU as 🏦 DOKU Payment Gateway (Sandbox)
 
     Developer->>Agent: "Setup DOKU Checkout integration"
-    Agent->>Plugin: Activate `setup-project` skill
+    Agent->>Plugin: Activate setup-project skill
     Plugin->>Plugin: Auto-detect stack (Node.js/TS, Python, Go, PHP)
-    Plugin->>Plugin: Inject DOKU credentials & update `.env`
-    Plugin->>Agent: Scaffold `DokuService` with HMAC-SHA256 signature math
-    Plugin->>Agent: Scaffold `/api/webhook` listener with timingSafeEqual
-    Agent->>DOKU: Execute live test request via `mock-test` skill
+    Plugin->>Plugin: Inject DOKU credentials & update .env
+    Plugin->>Agent: Scaffold DokuService with HMAC-SHA256 signature math
+    Plugin->>Agent: Scaffold /api/webhook listener with timingSafeEqual
+    Agent->>DOKU: Execute live test request via mock-test skill
     DOKU-->>Agent: HTTP 200 OK (Payment Link Created & Signature Verified)
-    Agent-->>Developer: ðŸš€ Complete, production-ready DOKU integration generated!
+    Agent-->>Developer: 🚀 Complete, production-ready DOKU integration generated!
 ```
 
 ---
@@ -75,16 +76,19 @@ sequenceDiagram
 ## English
 
 ### Overview
-`doku-gemini-mcp` is an advanced AI plugin and Model Context Protocol (MCP) server for **Google Antigravity**, **Gemini**, **Claude Desktop**, and **Cursor**. It equips AI coding assistants with end-to-end capabilities to scaffold, configure, test, sign, and maintain [DOKU Payment Gateway](https://developers.doku.com/) integrations.
+`doku-gemini-mcp` is an advanced AI plugin and Model Context Protocol (MCP v1.x) server for **Google Antigravity**, **Gemini**, **Claude Desktop**, and **Cursor**. It equips AI coding assistants with end-to-end capabilities to scaffold, configure, test, sign, and maintain [DOKU Payment Gateway](https://developers.doku.com/) integrations.
 
-Whether you are implementing DOKU Checkout, Direct Virtual Accounts (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB), QRIS (Jokul & SNAP), E-Wallets (OVO, ShopeePay, DANA, LinkAja), Credit Cards, Direct Debit, PayLater, or Online Refunds, this plugin provides automated agentic workflows, cryptographic HMAC-SHA256 & SNAP signature generators, webhook verifiers, and production security readiness checks.
+Built with a **Dual-Engine Architecture**, it seamlessly bridges:
+1. **Jokul API v2**: Hosted DOKU Checkout, Cancel Order API, Direct Virtual Accounts (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB), Direct QRIS, E-Wallets (OVO, ShopeePay, DANA, LinkAja), Credit Card 3DS, and Online Refunds.
+2. **Bank Indonesia SNAP BI v1.0**: Standard National Open API Payment protocols, Asymmetric RSA-2048 SHA256withRSA B2B Token generation (`POST /authorization/v1/access-token/b2b`), and Symmetric HMAC-SHA512 SNAP QRIS MPM (`POST /snap-adapter/b2b/v1.0/qr/qr-mpm-generate`).
 
 ### Key Capabilities
-- **12 Specialized Agentic Skills**: Automated stack detection, project setup, credential configuration, postman collection generation, live sandbox testing, and production audits.
-- **DOKU MCP Server**: Native Model Context Protocol server enabling AI agents to execute autonomous checkout and refund operations (AI Agentic Commerce).
-- **Cryptographic Strictness**: Built-in HMAC-SHA256 & SNAP HMAC-SHA512 request signature calculators and webhook notification validators adhering to official DOKU specifications.
-- **Multi-Language Support**: Scaffolding code for Node.js / TypeScript, Python, Go, PHP, Java, and Rust.
-- **Production Readiness Suite**: 8-point automated pre-go-live checklist preventing security vulnerabilities and data leakage.
+- **9 Production MCP Tools**: Autonomous AI tools for Checkout, Virtual Accounts, QRIS, E-Wallets, Order Inquiry, Refunds, and SNAP BI Token/QRIS.
+- **12 Specialized Agentic Skills**: Automated stack detection, project setup, credential configuration, Postman collection generation, live sandbox testing, and production audits.
+- **Executable Automation CLI**: Ready-to-run scripts for static security audits, Postman collection exports, and live sandbox connectivity.
+- **Cryptographic Strictness**: Built-in HMAC-SHA256, SNAP RSA-2048 SHA256withRSA, SNAP HMAC-SHA512, and `crypto.timingSafeEqual` webhook validation.
+- **Zero-Friction Stdio Server**: Packaged into a fast, single-file bundle (`dist/index.js`, 30 KB) that runs out-of-the-box in Claude Desktop, Cursor, and Antigravity.
+- **100% Tested**: Vitest unit test suite with 15 passing tests and 6/6 security invariant checks.
 
 ---
 
@@ -92,67 +96,60 @@ Whether you are implementing DOKU Checkout, Direct Virtual Accounts (BCA, Mandir
 ## Bahasa Indonesia
 
 ### Ringkasan
-`doku-gemini-mcp` adalah plugin AI dan server Model Context Protocol (MCP) tingkat lanjut untuk **Google Antigravity**, **Gemini**, **Claude Desktop**, dan **Cursor**. Plugin ini membekali asisten AI dengan kemampuan end-to-end untuk membuat, mengonfigurasi, menguji, menandatangani, dan memelihara integrasi [DOKU Payment Gateway](https://developers.doku.com/).
+`doku-gemini-mcp` adalah plugin AI dan server Model Context Protocol (MCP v1.x) resmi untuk **Google Antigravity**, **Gemini**, **Claude Desktop**, dan **Cursor**. Plugin ini membekali asisten AI dengan kemampuan end-to-end untuk membuat, mengonfigurasi, menguji, menandatangani, dan memelihara integrasi [DOKU Payment Gateway](https://developers.doku.com/).
 
-Baik Anda mengimplementasikan DOKU Checkout, Virtual Account Langsung (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB), QRIS (Jokul & SNAP), E-Wallet (OVO, ShopeePay, DANA, LinkAja), Kartu Kredit, Direct Debit, PayLater, maupun Online Refund, plugin ini menyediakan alur kerja agen otomatis, generator signature HMAC-SHA256 & SNAP kriptografis, verifikator webhook, dan pemeriksaan kesiapan keamanan produksi.
+Didukung oleh **Arsitektur Dual-Engine**, plugin ini mengintegrasikan dua pilar resmi DOKU:
+1. **Jokul API v2**: DOKU Checkout (Popup Modal & Redirect), Cancel Order API, Virtual Account Langsung (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB), QRIS Dinamis, E-Wallet (OVO, ShopeePay, DANA, LinkAja), Kartu Kredit 3DS, dan Online Refund.
+2. **Bank Indonesia SNAP BI v1.0**: Standar Nasional Open API Pembayaran, signature asimetris RSA-2048 SHA256withRSA untuk token B2B OAuth 2.0 (`POST /authorization/v1/access-token/b2b`), dan signature simetris HMAC-SHA512 untuk SNAP QRIS MPM (`POST /snap-adapter/b2b/v1.0/qr/qr-mpm-generate`).
 
 ### Fitur Utama
+- **9 Production MCP Tools**: Tool otonom untuk membuat link checkout, membatalkan pesanan, menerbitkan Virtual Account, membuat QRIS, inisiasi e-wallet, cek status invoice, refund online, dan SNAP BI token/QRIS.
 - **12 Skill Agen Terpesialisasi**: Deteksi stack otomatis, setup proyek, konfigurasi kredensial, pembuat koleksi Postman, penguji sandbox langsung, dan audit produksi.
-- **DOKU MCP Server**: Server Model Context Protocol asli yang memungkinkan agen AI menjalankan transaksi checkout & refund otonom (*AI Agentic Commerce*).
-- **Ketepatan Kriptografis**: Kalkulator signature permintaan HMAC-SHA256 & SNAP HMAC-SHA512 bawaan dan validator notifikasi webhook yang mematuhi spesifikasi resmi DOKU.
-- **Dukungan Multi-Bahasa**: Kode scaffolding untuk Node.js / TypeScript, Python, Go, PHP, Java, dan Rust.
-- **Rangkaian Kesiapan Produksi**: 8 poin checklist otomatis sebelum *go-live* untuk mencegah kerentanan keamanan dan kebocoran data.
-
+- **Rangkaian Skrip Otomasi CLI**: Skrip mandiri untuk audit keamanan statis, ekspor koleksi Postman v2.1, dan pengujian konektivitas sandbox.
+- **Ketepatan Kriptografis**: Kalkulator signature HMAC-SHA256, SNAP RSA-SHA256, SNAP HMAC-SHA512, dan validator webhook timing-safe (`crypto.timingSafeEqual`).
+- **Server Stdio Siap Pakai**: Terkompilasi ke dalam bundle tunggal super cepat (`dist/index.js`, 30 KB) yang langsung bekerja tanpa kompilasi tambahan.
 
 ---
 
-## Installation & Setup for Antigravity IDE & Gemini CLI
+## 🛠️ Model Context Protocol (MCP) Server — 9 Production Tools
 
-### Option A: Global Installation (Recommended)
+The DOKU MCP Server exposes 9 native tools to LLMs for autonomous financial operations:
 
-Installing the plugin globally allows **Antigravity IDE** and **Gemini CLI** to automatically discover all 11 skills and security rules across all your workspaces without extra configuration.
-
-#### 1. Clone to Global Plugin Root
-- **Windows (PowerShell)**:
-  ```powershell
-  git clone https://github.com/roedyrustam/doku-gemini-mcp.git "$env:USERPROFILE\.gemini\config\plugins\doku-gemini-mcp"
-  ```
-- **macOS / Linux / WSL (Bash)**:
-  ```bash
-  git clone https://github.com/roedyrustam/doku-gemini-mcp.git ~/.gemini/config/plugins/doku-gemini-mcp
-  ```
-
-#### 2. Auto-Discovery Verification
-Once cloned into `~/.gemini/config/plugins/doku-gemini-mcp`, Antigravity IDE will automatically detect:
-- `plugin.json` metadata & rules (`AGENTS.md`, `rules/*.md`).
-- All 12 specialized skills under `skills/`.
+| # | MCP Tool Name | Target Endpoint | Description |
+|---|---|---|---|
+| 1 | `create_checkout_payment` | `POST /checkout/v1/payment` | Generates a DOKU Checkout Payment Link URL (Popup modal / redirect). |
+| 2 | `cancel_checkout_order` | `POST /checkout/v3/cancellations` | Voids an unpaid checkout order before expiry. |
+| 3 | `create_virtual_account` | `POST /doku-virtual-account/v2/payment-code` | Generates a bank Virtual Account number (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB). |
+| 4 | `create_qris_payment` | `POST /qris/v1/payment-code` | Generates dynamic QRIS payment code and QR image string (Jokul v2). |
+| 5 | `create_ewallet_payment` | `POST /e-wallet/v1/payment` | Initiates an E-Wallet charge (OVO, ShopeePay, DANA, LinkAja). |
+| 6 | `check_transaction_status` | `GET /orders/v1/status/:invoice_number` | Queries real-time invoice payment status from DOKU. |
+| 7 | `process_refund` | `POST /orders/v1/refund` | Initiates an online refund for an existing settled transaction. |
+| 8 | `get_snap_b2b_token` | `POST /authorization/v1/access-token/b2b` | Obtains a SNAP BI OAuth 2.0 B2B Access Token via Asymmetric RSA-SHA256. |
+| 9 | `create_snap_qris_payment` | `POST /snap-adapter/b2b/v1.0/qr/qr-mpm-generate` | Generates dynamic QRIS adhering to Bank Indonesia SNAP standard via HMAC-SHA512. |
 
 ---
 
-### Option B: Workspace-Specific Installation
+## 🚀 Installation & Quick Start
 
-If you prefer to include the plugin directly inside a specific project repository:
+### 1. Global Installation for Antigravity IDE & Gemini CLI
+Clone globally so that Antigravity automatically detects all 12 skills, security rules, and the MCP server:
 
-1. Create a `.agents` folder in your project root:
-   ```bash
-   mkdir -p .agents/plugins
-   ```
-2. Clone the repository into `.agents/plugins`:
-   ```bash
-   git clone https://github.com/roedyrustam/doku-gemini-mcp.git .agents/plugins/doku-gemini-mcp
-   ```
+```powershell
+# Windows (PowerShell)
+git clone https://github.com/roedyrustam/doku-gemini-mcp.git "$env:USERPROFILE\.gemini\config\plugins\doku-gemini-mcp"
+```
 
----
+```bash
+# macOS / Linux / WSL
+git clone https://github.com/roedyrustam/doku-gemini-mcp.git ~/.gemini/config/plugins/doku-gemini-mcp
+```
 
-### Option C: DOKU MCP Server Registration
+### 2. Client Configuration (`mcp_config.json`)
 
-To enable **AI Agentic Commerce** (allowing the AI agent to generate payment links, issue Virtual Accounts, and generate QRIS codes autonomously via MCP tools):
+To enable AI Agentic Commerce in **Antigravity IDE**, **Gemini CLI**, **Claude Desktop**, or **Cursor**:
 
-#### 1. Copy or update `mcp_config.json`
-- **Antigravity IDE**: Place in `~/.gemini/antigravity-ide/mcp_config.json`
-- **Claude Desktop**: Place in `%APPDATA%\Claude\claude_desktop_config.json` (Windows) or `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS).
-
-#### 2. Configuration Example
+#### Antigravity / Gemini Configuration
+Place in `~/.gemini/antigravity-ide/mcp_config.json`:
 ```json
 {
   "mcpServers": {
@@ -169,141 +166,8 @@ To enable **AI Agentic Commerce** (allowing the AI agent to generate payment lin
 }
 ```
 
-> [!TIP]
-> Retrieve your Sandbox Client ID and Secret Key from [DOKU Sandbox Back Office](https://sandbox.doku.com/bo/login).  
-> Test payments and webhooks using [DOKU Integration Payment Simulator](https://sandbox.doku.com/gtw-config-v2/simulator).
-
----
-
-## Directory Structure
-
-```text
-doku-gemini-mcp/
-â”œâ”€â”€ README.md                           # Master Documentation & Quick Start
-â”œâ”€â”€ AGENTS.md                           # Mandatory Security Rules & Signature Specifications
-â”œâ”€â”€ plugin.json                         # Plugin Metadata & Keywords
-â”œâ”€â”€ gemini-extension.json               # Gemini Extension Specification
-â”œâ”€â”€ mcp_config.json                     # MCP Client Configuration Template
-â”œâ”€â”€ docs/                               # Deep-Dive Technical Guides
-â”‚   â”œâ”€â”€ DOKU_CHECKOUT_GUIDE.md          # Complete DOKU Checkout Integration Guide
-â”‚   â”œâ”€â”€ SKILLS_GUIDE.md                 # Complete Guide to all 12 Skills
-â”‚   â”œâ”€â”€ HMAC_SIGNATURE_GUIDE.md         # HMAC-SHA256 Math & Code Implementation Guide
-â”‚   â”œâ”€â”€ MCP_SERVER_GUIDE.md             # DOKU MCP Server Architecture & Setup
-â”‚   â”œâ”€â”€ WEBHOOK_GUIDE.md                # Webhook Verification & Idempotency Guard
-â”‚   â”œâ”€â”€ PRODUCTION_CHECKLIST.md         # 8-Point Go-Live Production Readiness Audit
-â”‚   â””â”€â”€ FRONTEND_INTEGRATION_GUIDE.md   # DOKU Checkout JS Popup & Redirect Integration
-â”œâ”€â”€ rules/                              # Modular Rules
-â”‚   â”œâ”€â”€ doku-security-rules.md          # Security & Credentials Guardrails
-â”‚   â””â”€â”€ mcp-tool-rules.md               # MCP Tool Design Standards
-â””â”€â”€ skills/                             # 12 Specialized Agentic Skills
-    â”œâ”€â”€ setup-project/                  # Main entry point for project scaffolding
-    â”œâ”€â”€ detect-stack/                   # Programming language & framework detector
-    â”œâ”€â”€ setup-credentials/              # Secure DOKU credential setup
-    â”œâ”€â”€ doku-checkout/                  # Dedicated DOKU Checkout reference guide
-    â”œâ”€â”€ doku-payment-gateway/           # Core Jokul API v2 reference guide
-    â”œâ”€â”€ webhook-receiver/               # HTTP Webhook listener generator
-    â”œâ”€â”€ doku-mcp-server/                # DOKU MCP Agentic Commerce server guide
-    â”œâ”€â”€ mock-test/                      # Live Sandbox API & signature test runner
-    â”œâ”€â”€ generate-postman/               # Postman Collection v2.1 exporter with pre-request scripts
-    â”œâ”€â”€ production-checklist/           # 8-step pre-go-live readiness auditor
-    â”œâ”€â”€ fetch-api-spec/                 # Official DOKU API spec fetcher
-    â””â”€â”€ upgrade/                        # API spec diffing & upgrade patcher
-```
-
----
-
-## Specialized Skills Reference
-
-| Skill Name | Purpose / Deskripsi | Target Stack |
-|---|---|---|
-| [`setup-project`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/setup-project/SKILL.md) | Main entry point â€” scaffolds complete DOKU Payment Gateway integration | Node, Python, Go, PHP, Java |
-| [`detect-stack`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/detect-stack/SKILL.md) | Detects language, framework, ORM, and environment structure | All Stacks |
-| [`setup-credentials`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/setup-credentials/SKILL.md) | Safely configures DOKU Client ID, Secret Key, and Environment | `.env`, Config Files |
-| [`doku-checkout`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/doku-checkout/SKILL.md) | Dedicated guide for DOKU Checkout, popup/redirect UI, and Cancel Order API | All APIs & Frontends |
-| [`doku-payment-gateway`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/doku-payment-gateway/SKILL.md) | Primary reference for Jokul API v2, endpoints, and HMAC signatures | All APIs |
-| [`webhook-receiver`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/webhook-receiver/SKILL.md) | Scaffolds webhook endpoint with signature verification & anti-replay idempotency | Express, Fastify, FastAPI, Gin |
-| [`doku-mcp-server`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/doku-mcp-server/SKILL.md) | Configures DOKU MCP server for AI Agentic Commerce | TypeScript, Python |
-| [`mock-test`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/mock-test/SKILL.md) | Validates HMAC-SHA256 signature calculations against DOKU Sandbox | Sandbox APIs |
-| [`generate-postman`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/generate-postman/SKILL.md) | Exports Postman Collection v2.1 with automatic pre-request signature scripts | Postman v2.1 |
-| [`production-checklist`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/production-checklist/SKILL.md) | Runs 8 mandatory security and stability checks before deployment | Production Deployment |
-| [`fetch-api-spec`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/fetch-api-spec/SKILL.md) | Scrapes and stores official DOKU API specs locally | OpenAPI / JSON Spec |
-| [`upgrade`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/skills/upgrade/SKILL.md) | Diffs existing code against latest spec and applies non-breaking patches | Upgrades |
-
----
-
-## Quick Start: DOKU HMAC-SHA256 Signature
-
-DOKU Payment Gateway requires cryptographic HMAC-SHA256 HTTP headers for all requests.
-
-### 1. Mandatory HTTP Headers
-- `Client-Id`: Merchant Client ID from DOKU Back Office.
-- `Request-Id`: Unique UUID v4 string per request.
-- `Request-Timestamp`: UTC ISO8601 string **without milliseconds** (e.g. `2026-08-09T00:00:00Z`).
-- `Signature`: Format `HMACSHA256=<base64-signature>`.
-
-*Note: `Request-Target` and `Digest` are used only for Signature calculation component string, NOT as HTTP Request Headers.*
-
-### 2. Signature Assembly String Formula
-```text
-Client-Id:<CLIENT_ID>\nRequest-Id:<REQUEST_ID>\nRequest-Timestamp:<TIMESTAMP>\nRequest-Target:<TARGET_PATH>\nDigest:<DIGEST_STRING>
-```
-> [!CAUTION]
-> Do NOT add a trailing newline (`\n`) at the end of the raw component string.  
-> For `GET` requests (e.g. `/orders/v1/status/:invoice_number`), omit `\nDigest:<DIGEST_STRING>`.
-
-### 3. Node.js / TypeScript Example
-```typescript
-import crypto from 'crypto';
-
-export function calculateDokuSignature(params: {
-  clientId: string;
-  secretKey: string;
-  requestId: string;
-  timestamp: string; // e.g. "2026-08-09T00:00:00Z"
-  targetPath: string; // e.g. "/checkout/v1/payment"
-  body?: object;
-}): { digest?: string; signature: string } {
-  let digestString = '';
-  
-  if (params.body && Object.keys(params.body).length > 0) {
-    const jsonBody = JSON.stringify(params.body);
-    const bodyHash = crypto.createHash('sha256').update(jsonBody, 'utf8').digest();
-    digestString = bodyHash.toString('base64');
-  }
-
-  let componentString = `Client-Id:${params.clientId}\nRequest-Id:${params.requestId}\nRequest-Timestamp:${params.timestamp}\nRequest-Target:${params.targetPath}`;
-  
-  if (digestString) {
-    componentString += `\nDigest:${digestString}`;
-  }
-
-  const hmac = crypto.createHmac('sha256', params.secretKey);
-  hmac.update(componentString, 'utf8');
-  const signature = `HMACSHA256=${hmac.digest('base64')}`;
-
-  return { digest: digestString || undefined, signature };
-}
-```
-
----
-
-## DOKU MCP Server Integration
-
-Enable your AI assistant (Antigravity, Gemini, Claude Desktop, Cursor) to execute autonomous payment operations using the Model Context Protocol.
-
-### Server Tools Matrix (9 Production Tools)
-- `create_checkout_payment`: Generate DOKU Checkout Payment Link URL (`/checkout/v1/payment`).
-- `cancel_checkout_order`: Void unpaid checkout orders (`/checkout/v3/cancellations`).
-- `create_virtual_account`: Generate Bank Virtual Account numbers (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB).
-- `create_qris_payment`: Generate dynamic QRIS payment codes & QR images (Jokul v2).
-- `create_ewallet_payment`: Initiate E-Wallet charges (OVO, ShopeePay, DANA, LinkAja).
-- `check_transaction_status`: Query real-time payment invoice status from DOKU API.
-- `process_refund`: Initiate online refunds for paid orders.
-- `get_snap_b2b_token`: Obtain SNAP BI OAuth 2.0 B2B token with Asymmetric RSA-SHA256 signature (`/authorization/v1/access-token/b2b`).
-- `create_snap_qris_payment`: Generate dynamic QRIS conforming to Bank Indonesia SNAP standard (`/snap-adapter/b2b/v1.0/qr/qr-mpm-generate`).
-
-
-### Configuration (`mcp_config.json`)
+#### Claude Desktop Configuration
+Place in `%APPDATA%\Claude\claude_desktop_config.json` (Windows) or `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS):
 ```json
 {
   "mcpServers": {
@@ -313,6 +177,7 @@ Enable your AI assistant (Antigravity, Gemini, Claude Desktop, Cursor) to execut
       "env": {
         "DOKU_CLIENT_ID": "YOUR_SANDBOX_CLIENT_ID",
         "DOKU_SECRET_KEY": "YOUR_SANDBOX_SECRET_KEY",
+        "DOKU_PRIVATE_KEY_PEM": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----",
         "DOKU_IS_PRODUCTION": "false"
       }
     }
@@ -320,37 +185,88 @@ Enable your AI assistant (Antigravity, Gemini, Claude Desktop, Cursor) to execut
 }
 ```
 
----
-
-## Documentation Index
-
-Explore detailed technical guides in the [`docs/`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs) directory:
-
-1. ðŸ“– [**Skills Comprehensive Guide (`SKILLS_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/SKILLS_GUIDE.md)  
-   Detailed manual and trigger instructions for all 12 agentic skills.
-2. ðŸ”‘ [**HMAC Request Signature Guide (`HMAC_SIGNATURE_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/HMAC_SIGNATURE_GUIDE.md)  
-   Detailed cryptography formulas and code implementations for Jokul API v2 (HMAC-SHA256) and SNAP API v1.0 (HMAC-SHA512) signatures.
-3. ðŸ¤– [**MCP Server Guide (`MCP_SERVER_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/MCP_SERVER_GUIDE.md)  
-   Complete guide to building, configuring, and extending the DOKU Model Context Protocol Server for AI Agentic Commerce.
-4. ðŸ”” [**Webhook & Anti-Replay Guide (`WEBHOOK_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/WEBHOOK_GUIDE.md)  
-   Cryptographic signature verification on HTTP notifications, timing-safe equality, atomic database transactions, and idempotency guards.
-5. ðŸš€ [**Production Readiness Checklist (`PRODUCTION_CHECKLIST.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/PRODUCTION_CHECKLIST.md)  
-   8-point audit covering credential isolation, HTTPS enforcement, PII log sanitization, rate limiting, and go-live deployment.
-6. ðŸŒ [**Frontend Integration Guide (`FRONTEND_INTEGRATION_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/FRONTEND_INTEGRATION_GUIDE.md)  
-   Integrating the DOKU Checkout JS library for pop-up UI mode and frontend redirect handling.
+> [!TIP]
+> - Get free Sandbox credentials at [DOKU Sandbox Back Office](https://sandbox.doku.com/bo/login).
+> - Test customer payments and webhooks using the [DOKU Integration Payment Simulator](https://sandbox.doku.com/gtw-config-v2/simulator).
 
 ---
 
-## Security & Credentials Safety Policy (`AGENTS.md`)
+## 💻 Executable Automation Scripts
 
-- **NEVER** hardcode `DOKU_CLIENT_ID` or `DOKU_SECRET_KEY` in source code or repositories.
-- **ALWAYS** inject API credentials via environment variables (`process.env.DOKU_CLIENT_ID`, `process.env.DOKU_SECRET_KEY`).
-- Maintain separate credentials for **Sandbox** (`https://api-sandbox.doku.com` | Back Office: `https://sandbox.doku.com/bo/login`) and **Production** (`https://api.doku.com` | Back Office: `https://dashboard.doku.com`).
-- Always use `crypto.timingSafeEqual` when verifying incoming HTTP webhook signatures to prevent timing side-channel attacks.
+The repository includes a ready-to-use suite of CLI scripts:
+
+```bash
+# 1. Run security and signature compliance audit
+pnpm run audit
+
+# 2. Export Postman Collection v2.1 with dynamic CryptoJS HMAC scripts
+pnpm run export-postman
+
+# 3. Test live connectivity against DOKU Sandbox
+pnpm run test-sandbox
+
+# 4. Auto-detect project tech stack and save .doku-config.json
+node scripts/detect-stack.mjs
+
+# 5. Run Vitest unit test suite
+pnpm test
+```
 
 ---
 
-## License
+## 📖 12 Specialized Agentic Skills Reference
 
-This project is released under the [MIT License](LICENSE).  
-Developed by [Roedy Rustam](https://github.com/roedyrustam).
+| Skill Name | Purpose / Deskripsi | Target Stack |
+|---|---|---|
+| [`setup-project`](file:///c:/dokugemini/doku-gemini-mcp/skills/setup-project/SKILL.md) | Main orchestrator — scaffolds complete DOKU Payment Gateway integration | Node, Python, Go, PHP, Java |
+| [`detect-stack`](file:///c:/dokugemini/doku-gemini-mcp/skills/detect-stack/SKILL.md) | Detects language, framework, ORM, and environment structure | All Stacks |
+| [`setup-credentials`](file:///c:/dokugemini/doku-gemini-mcp/skills/setup-credentials/SKILL.md) | Safely configures DOKU Client ID, Secret Key, and Environment | `.env`, Config Files |
+| [`doku-checkout`](file:///c:/dokugemini/doku-gemini-mcp/skills/doku-checkout/SKILL.md) | Dedicated guide for DOKU Checkout, popup/redirect UI, and Cancel Order API | All APIs & Frontends |
+| [`doku-payment-gateway`](file:///c:/dokugemini/doku-gemini-mcp/skills/doku-payment-gateway/SKILL.md) | Primary reference for Jokul API v2, endpoints, and HMAC signatures | All APIs |
+| [`webhook-receiver`](file:///c:/dokugemini/doku-gemini-mcp/skills/webhook-receiver/SKILL.md) | Scaffolds webhook endpoint with signature verification & idempotency guard | Express, Fastify, FastAPI, Gin |
+| [`doku-mcp-server`](file:///c:/dokugemini/doku-gemini-mcp/skills/doku-mcp-server/SKILL.md) | Configures DOKU MCP server for AI Agentic Commerce | TypeScript, Node.js |
+| [`mock-test`](file:///c:/dokugemini/doku-gemini-mcp/skills/mock-test/SKILL.md) | Validates HMAC-SHA256 signature calculations against DOKU Sandbox | Sandbox APIs |
+| [`generate-postman`](file:///c:/dokugemini/doku-gemini-mcp/skills/generate-postman/SKILL.md) | Exports Postman Collection v2.1 with automatic pre-request signature scripts | Postman v2.1 |
+| [`production-checklist`](file:///c:/dokugemini/doku-gemini-mcp/skills/production-checklist/SKILL.md) | Runs 8 mandatory security and stability checks before deployment | Production Deployment |
+| [`fetch-api-spec`](file:///c:/dokugemini/doku-gemini-mcp/skills/fetch-api-spec/SKILL.md) | Scrapes and stores official DOKU API specs locally | OpenAPI / JSON Spec |
+| [`upgrade`](file:///c:/dokugemini/doku-gemini-mcp/skills/upgrade/SKILL.md) | Diffs existing code against latest spec and applies non-breaking patches | Upgrades |
+
+---
+
+## 🔒 Cryptographic Strictness & Security Policies (`AGENTS.md`)
+
+1. **Jokul API v2 Component String Formula**:
+   ```text
+   Client-Id:<CLIENT_ID>\nRequest-Id:<REQUEST_ID>\nRequest-Timestamp:<TIMESTAMP>\nRequest-Target:<TARGET_PATH>\nDigest:<DIGEST_STRING>
+   ```
+   - **No trailing newline (`\n`)** allowed at the end of the component string.
+   - For `GET` requests, completely omit `\nDigest:<DIGEST_STRING>`.
+   - `Request-Timestamp` must be UTC ISO8601 strictly without milliseconds (e.g. `2026-08-09T00:00:00Z`).
+
+2. **Bank Indonesia SNAP BI v1.0 Standard**:
+   - **Asymmetric Signature**: `SHA256withRSA` over `X-CLIENT-KEY + "|" + X-TIMESTAMP` using merchant's Private Key.
+   - **Symmetric Signature**: `HMAC-SHA512` over `HTTPMethod + ":" + EndpointUrl + ":" + AccessToken + ":" + Lowercase(HexEncode(SHA-256(minify(RequestBody)))) + ":" + TimeStamp`.
+   - `AccessToken` inside the string to sign must **not** include the `Bearer ` prefix.
+
+3. **Mandatory Webhook Verification**:
+   - Inbound webhooks must be verified using `crypto.timingSafeEqual` to prevent timing attacks.
+   - Unverified requests must be immediately rejected with HTTP `401 Unauthorized`.
+
+---
+
+## 📚 Documentation Index
+
+1. 📖 [**Skills Comprehensive Guide (`docs/SKILLS_GUIDE.md`)**](file:///c:/dokugemini/doku-gemini-mcp/docs/SKILLS_GUIDE.md)  
+2. 🔑 [**HMAC & SNAP Signature Guide (`docs/HMAC_SIGNATURE_GUIDE.md`)**](file:///c:/dokugemini/doku-gemini-mcp/docs/HMAC_SIGNATURE_GUIDE.md)  
+3. 🤖 [**MCP Server Guide (`docs/MCP_SERVER_GUIDE.md`)**](file:///c:/dokugemini/doku-gemini-mcp/docs/MCP_SERVER_GUIDE.md)  
+4. 🔔 [**Webhook & Anti-Replay Guide (`docs/WEBHOOK_GUIDE.md`)**](file:///c:/dokugemini/doku-gemini-mcp/docs/WEBHOOK_GUIDE.md)  
+5. 🚀 [**Production Readiness Checklist (`docs/PRODUCTION_CHECKLIST.md`)**](file:///c:/dokugemini/doku-gemini-mcp/docs/PRODUCTION_CHECKLIST.md)  
+6. 🌐 [**Frontend Integration Guide (`docs/FRONTEND_INTEGRATION_GUIDE.md`)**](file:///c:/dokugemini/doku-gemini-mcp/docs/FRONTEND_INTEGRATION_GUIDE.md)  
+7. 💳 [**DOKU Checkout Comprehensive Guide (`docs/DOKU_CHECKOUT_GUIDE.md`)**](file:///c:/dokugemini/doku-gemini-mcp/docs/DOKU_CHECKOUT_GUIDE.md)  
+
+---
+
+## 📜 License
+
+This project is licensed under the [MIT License](LICENSE).  
+Authored by [Roedy Rustam](https://github.com/roedyrustam).

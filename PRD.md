@@ -1,7 +1,7 @@
 # Product Requirements Document (PRD)
 
 **Project**: DOKU Gemini MCP (`doku-gemini-mcp`)  
-**Version**: 1.2.0  
+**Version**: 1.3.0  
 **Status**: Approved  
 **Author**: Roedy Rustam  
 **Created**: 2026-11-05  
