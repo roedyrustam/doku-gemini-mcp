@@ -28,7 +28,8 @@
     "audit": "node scripts/audit-doku.mjs",
     "export-postman": "node scripts/export-postman.mjs",
     "test-sandbox": "node scripts/test-sandbox.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepack": "pnpm run build && pnpm run audit && pnpm test"
   },
   "author": "Roedy Rustam",
   "license": "MIT",
@@ -41,14 +42,23 @@
     "payment-gateway",
     "mcp",
     "model-context-protocol",
+    "mcp-server",
     "gemini",
     "antigravity",
     "claude-desktop",
+    "cursor",
+    "agentic-commerce",
+    "ai-agent",
     "jokul-api",
     "snap-api",
     "snap-bi",
     "qris",
-    "virtual-account"
+    "virtual-account",
+    "e-wallet",
+    "fintech",
+    "indonesia",
+    "checkout",
+    "refund"
   ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.6.1",

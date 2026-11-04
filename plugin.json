@@ -16,8 +16,14 @@
     "doku",
     "payment-gateway",
     "mcp",
+    "model-context-protocol",
+    "mcp-server",
     "gemini",
     "antigravity",
+    "claude-desktop",
+    "cursor",
+    "agentic-commerce",
+    "ai-agent",
     "jokul-api",
     "snap-api",
     "snap-bi",
@@ -31,6 +37,8 @@
     "direct-debit",
     "paylater",
     "refund",
+    "fintech",
+    "indonesia",
     "webhook"
   ]
 }

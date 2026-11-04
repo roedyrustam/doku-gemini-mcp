@@ -7,9 +7,10 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   dts: true,
+  treeshake: true,
+  splitting: false,
   banner: {
     js: '#!/usr/bin/env node',
   },
   shims: true,
 });
-
