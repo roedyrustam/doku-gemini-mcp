@@ -1,4 +1,4 @@
-# DOKU Gemini MCP — Design & Skill Orchestration Document (BLUEPRINT.md)
+﻿# DOKU Gemini MCP â€” Design & Skill Orchestration Document (BLUEPRINT.md)
 
 **Project Name**: `doku-gemini-mcp`  
 **Version**: 1.2.0  
@@ -60,49 +60,50 @@ flowchart LR
 
 ```text
 doku-gemini-mcp/
-├── .github/
-│   └── workflows/
-│       └── ci.yml                      # CI pipeline (lint, typecheck, test, build)
-├── dist/                               # Compiled single-file bundle (tsup output)
-│   └── index.js                        # Executable entry point (node dist/index.js)
-├── docs/                               # 7 Technical documentation guides
-├── rules/                              # Modular rules for AI assistants
-├── scripts/                            # Executable agentic helper scripts
-│   ├── audit-doku.mjs                  # Security & signature syntax scanner
-│   ├── export-postman.mjs              # Postman Collection v2.1 exporter
-│   ├── test-sandbox.mjs                # Live DOKU Sandbox API connectivity tester
-│   └── detect-stack.mjs                # Tech stack auto-detector
-├── skills/                             # 12 Specialized agentic skills (SKILL.md)
-├── src/                                # TypeScript source code
-│   ├── core/
-│   │   ├── client.ts                   # DOKU API HTTP client with auto-signing
-│   │   ├── constants.ts                # Endpoints, bank codes, and channel enums
-│   │   ├── signer.ts                   # Jokul v2 & SNAP BI cryptographic signer
-│   │   └── types.ts                    # TypeScript interfaces for requests & responses
-│   ├── tools/                          # MCP tool handlers
-│   │   ├── checkout.ts                 # create_checkout_payment & cancel_checkout_order
-│   │   ├── virtual-account.ts          # create_virtual_account
-│   │   ├── qris.ts                     # create_qris_payment
-│   │   ├── ewallet.ts                  # create_ewallet_payment
-│   │   ├── status.ts                   # check_transaction_status
-│   │   └── refund.ts                   # process_refund
-│   └── index.ts                        # MCP Server initialization & Stdio transport
-├── tests/                              # Vitest unit test suite
-│   ├── signer.test.ts                  # Cryptographic signature unit tests
-│   ├── webhook.test.ts                 # Webhook verification & timingSafeEqual tests
-│   └── tools.test.ts                   # MCP tool schema & execution tests
-├── .gitignore                          # Cleaned gitignore with *.stackdump
-├── AGENTS.md                           # Antigravity security rules
-├── BLUEPRINT.md                        # This document
-├── gemini-extension.json               # Synced version 1.2.0
-├── LICENSE                             # MIT
-├── mcp_config.json                     # Client configuration template
-├── package.json                        # Scripts, dependencies, and metadata
-├── plugin.json                         # Synced version 1.2.0
-├── PRD.md                              # Formal Product Requirements Document
-├── README.md                           # Master documentation
-├── tsconfig.json                       # TypeScript compiler configuration
-└── tsup.config.ts                      # Bundler configuration
+â”œâ”€â”€ .github/
+â”‚   â””â”€â”€ workflows/
+â”‚       â””â”€â”€ ci.yml                      # CI pipeline (lint, typecheck, test, build)
+â”œâ”€â”€ dist/                               # Compiled single-file bundle (tsup output)
+â”‚   â””â”€â”€ index.js                        # Executable entry point (node dist/index.js)
+â”œâ”€â”€ docs/                               # 7 Technical documentation guides
+â”œâ”€â”€ rules/                              # Modular rules for AI assistants
+â”œâ”€â”€ scripts/                            # Executable agentic helper scripts
+â”‚   â”œâ”€â”€ audit-doku.mjs                  # Security & signature syntax scanner
+â”‚   â”œâ”€â”€ export-postman.mjs              # Postman Collection v2.1 exporter
+â”‚   â”œâ”€â”€ test-sandbox.mjs                # Live DOKU Sandbox API connectivity tester
+â”‚   â””â”€â”€ detect-stack.mjs                # Tech stack auto-detector
+â”œâ”€â”€ skills/                             # 12 Specialized agentic skills (SKILL.md)
+â”œâ”€â”€ src/                                # TypeScript source code
+â”‚   â”œâ”€â”€ core/
+â”‚   â”‚   â”œâ”€â”€ client.ts                   # DOKU API HTTP client with auto-signing
+â”‚   â”‚   â”œâ”€â”€ constants.ts                # Endpoints, bank codes, and channel enums
+â”‚   â”‚   â”œâ”€â”€ signer.ts                   # Jokul v2 & SNAP BI cryptographic signer
+â”‚   â”‚   â””â”€â”€ types.ts                    # TypeScript interfaces for requests & responses
+â”‚   â”œâ”€â”€ tools/                          # MCP tool handlers
+â”‚   â”‚   â”œâ”€â”€ checkout.ts                 # create_checkout_payment & cancel_checkout_order
+â”‚   â”‚   â”œâ”€â”€ virtual-account.ts          # create_virtual_account
+â”‚   â”‚   â”œâ”€â”€ qris.ts                     # create_qris_payment
+â”‚   â”‚   â”œâ”€â”€ ewallet.ts                  # create_ewallet_payment
+â”‚   â”‚   â”œâ”€â”€ status.ts                   # check_transaction_status
+â”‚   â”‚   â””â”€â”€ refund.ts                   # process_refund
+│   │   └── snap.ts                     # get_snap_b2b_token & create_snap_qris_payment
+â”‚   â””â”€â”€ index.ts                        # MCP Server initialization & Stdio transport
+â”œâ”€â”€ tests/                              # Vitest unit test suite
+â”‚   â”œâ”€â”€ signer.test.ts                  # Cryptographic signature unit tests
+â”‚   â”œâ”€â”€ webhook.test.ts                 # Webhook verification & timingSafeEqual tests
+â”‚   â””â”€â”€ tools.test.ts                   # MCP tool schema & execution tests
+â”œâ”€â”€ .gitignore                          # Cleaned gitignore with *.stackdump
+â”œâ”€â”€ AGENTS.md                           # Antigravity security rules
+â”œâ”€â”€ BLUEPRINT.md                        # This document
+â”œâ”€â”€ gemini-extension.json               # Synced version 1.2.0
+â”œâ”€â”€ LICENSE                             # MIT
+â”œâ”€â”€ mcp_config.json                     # Client configuration template
+â”œâ”€â”€ package.json                        # Scripts, dependencies, and metadata
+â”œâ”€â”€ plugin.json                         # Synced version 1.2.0
+â”œâ”€â”€ PRD.md                              # Formal Product Requirements Document
+â”œâ”€â”€ README.md                           # Master documentation
+â”œâ”€â”€ tsconfig.json                       # TypeScript compiler configuration
+â””â”€â”€ tsup.config.ts                      # Bundler configuration
 ```
 
 ---
@@ -181,4 +182,5 @@ export interface CheckoutPaymentPayload {
   };
 }
 ```
+
 

@@ -2,7 +2,9 @@ import crypto from 'crypto';
 import {
   JokulSignatureParams,
   SnapSignatureParams,
+  SnapAsymmetricSignatureParams,
   WebhookVerificationParams,
+  SnapWebhookVerificationParams,
 } from './types.js';
 
 /**
@@ -13,7 +15,7 @@ export function generateDokuTimestamp(date: Date = new Date()): string {
 }
 
 /**
- * Calculates Base64-encoded SHA-256 Digest of the payload
+ * Calculates Base64-encoded SHA-256 Digest of the payload for Jokul API v2
  */
 export function calculateDigest(body?: object | string): string {
   if (!body) return '';
@@ -61,9 +63,38 @@ export function calculateJokulSignature(params: JokulSignatureParams): {
 }
 
 /**
+ * Generates SNAP BI Asymmetric Signature (SHA256withRSA) for Get Token B2B API
+ * Endpoint: POST /authorization/v1/access-token/b2b
+ * Formula: stringToSign = X-CLIENT-KEY + "|" + X-TIMESTAMP
+ * Signed with Merchant RSA Private Key (PKCS#8 / PKCS#1 PEM)
+ */
+export function calculateSnapAsymmetricSignature(
+  params: SnapAsymmetricSignatureParams
+): {
+  stringToSign: string;
+  signature: string;
+} {
+  const { clientKey, timestamp, privateKeyPem } = params;
+
+  const stringToSign = `${clientKey}|${timestamp}`;
+
+  const signer = crypto.createSign('RSA-SHA256');
+  signer.update(stringToSign, 'utf8');
+  signer.end();
+
+  const signature = signer.sign(privateKeyPem, 'base64');
+
+  return {
+    stringToSign,
+    signature,
+  };
+}
+
+/**
  * Constructs SNAP BI API v1.0 Symmetric String-to-Sign and computes HMAC-SHA512 Signature
  * Formula:
- * HTTPMethod + ":" + EndpointUrl + ":" + AccessToken + ":" + Lowercase(HexEncode(SHA-256(MinifiedRequestBody))) + ":" + Timestamp
+ * HTTPMethod + ":" + EndpointUrl + ":" + AccessToken + ":" + Lowercase(HexEncode(SHA-256(minify(RequestBody)))) + ":" + Timestamp
+ * Note: AccessToken is strictly WITHOUT the 'Bearer ' prefix
  */
 export function calculateSnapSignature(params: SnapSignatureParams): {
   minifiedBodyHash: string;
@@ -72,6 +103,9 @@ export function calculateSnapSignature(params: SnapSignatureParams): {
 } {
   const { httpMethod, endpointUrl, accessToken, secretKey, timestamp, body } =
     params;
+
+  // Ensure AccessToken is clean without 'Bearer ' prefix
+  const cleanAccessToken = accessToken.replace(/^Bearer\s+/i, '');
 
   let minifiedBody = '';
   if (body) {
@@ -84,7 +118,7 @@ export function calculateSnapSignature(params: SnapSignatureParams): {
     .digest('hex')
     .toLowerCase();
 
-  const stringToSign = `${httpMethod.toUpperCase()}:${endpointUrl}:${accessToken}:${bodyHash}:${timestamp}`;
+  const stringToSign = `${httpMethod.toUpperCase()}:${endpointUrl}:${cleanAccessToken}:${bodyHash}:${timestamp}`;
 
   const hmac = crypto.createHmac('sha512', secretKey);
   hmac.update(stringToSign, 'utf8');
@@ -98,7 +132,7 @@ export function calculateSnapSignature(params: SnapSignatureParams): {
 }
 
 /**
- * Validates incoming HTTP Webhook Signature with timing-safe comparison to prevent timing side-channel attacks
+ * Validates incoming HTTP Webhook Signature with timing-safe comparison (Jokul v2)
  */
 export function verifyWebhookSignature(params: WebhookVerificationParams): boolean {
   const {
@@ -134,3 +168,41 @@ export function verifyWebhookSignature(params: WebhookVerificationParams): boole
   return crypto.timingSafeEqual(expectedBuffer, receivedBuffer);
 }
 
+/**
+ * Validates incoming SNAP BI Symmetric Webhook / Notification Signature with timingSafeEqual
+ */
+export function verifySnapWebhookSignature(
+  params: SnapWebhookVerificationParams
+): boolean {
+  const {
+    httpMethod,
+    endpointUrl,
+    accessToken = '',
+    timestamp,
+    signature,
+    secretKey,
+    rawBody,
+  } = params;
+
+  if (!httpMethod || !endpointUrl || !timestamp || !signature || !secretKey) {
+    return false;
+  }
+
+  const expected = calculateSnapSignature({
+    httpMethod,
+    endpointUrl,
+    accessToken,
+    secretKey,
+    timestamp,
+    body: rawBody,
+  });
+
+  const expectedBuffer = Buffer.from(expected.signature, 'utf8');
+  const receivedBuffer = Buffer.from(signature, 'utf8');
+
+  if (expectedBuffer.length !== receivedBuffer.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(expectedBuffer, receivedBuffer);
+}

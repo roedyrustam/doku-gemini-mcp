@@ -50,21 +50,24 @@
 
 ## 5. Feature Requirements
 
-### MVP Features (Must Have — v1.2.0)
+### MVP Features (Must Have â€” v1.2.0)
 - [x] **TypeScript MCP Server Core (`src/index.ts`)**: Server Model Context Protocol berbasis `@modelcontextprotocol/sdk` v1.x menggunakan `StdioServerTransport`.
-- [x] **7 Core MCP Payment Tools**:
+- [x] **9 Core MCP Payment Tools (Jokul v2 & BI-SNAP)**:
   1. `create_checkout_payment`: Generate link DOKU Checkout (`POST /checkout/v1/payment`).
   2. `cancel_checkout_order`: Batalkan order checkout belum bayar (`POST /checkout/v3/cancellations`).
   3. `create_virtual_account`: Terbitkan nomor VA langsung BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB (`POST /doku-virtual-account/v2/payment-code`).
-  4. `create_qris_payment`: Generate dynamic QRIS code & QR image (`POST /qris/v1/payment-code` & SNAP MPM).
+  4. `create_qris_payment`: Generate dynamic QRIS code & QR image (`POST /qris/v1/payment-code`).
   5. `create_ewallet_payment`: Inisiasi charge OVO, ShopeePay, DANA, LinkAja (`POST /e-wallet/v1/payment`).
   6. `check_transaction_status`: Cek real-time status pembayaran (`GET /orders/v1/status/:invoice_number`).
   7. `process_refund`: Inisiasi refund online (`POST /orders/v1/refund`).
+  8. `get_snap_b2b_token`: Dapatkan B2B OAuth token via Asymmetric RSA-SHA256 (`POST /authorization/v1/access-token/b2b`).
+  9. `create_snap_qris_payment`: Generate dynamic QRIS resmi standar Bank Indonesia SNAP (`POST /snap-adapter/b2b/v1.0/qr/qr-mpm-generate`).
 - [x] **Cryptographic Engine (`src/core/signer.ts`)**:
   - SHA-256 Digest Base64 calculation.
   - Jokul v2 HMAC-SHA256 signature generator (tanpa trailing `\n`, timestamp ISO8601 tanpa ms).
-  - SNAP BI v1.0 Symmetric HMAC-SHA512 generator.
-  - Safe webhook verifier dengan `crypto.timingSafeEqual`.
+  - SNAP BI Asymmetric Signature generator (SHA256withRSA) untuk endpoint OAuth token.
+  - SNAP BI Symmetric HMAC-SHA512 generator (auto-strip `Bearer ` prefix).
+  - Safe webhook verifier dengan `crypto.timingSafeEqual` untuk Jokul dan SNAP.
 - [x] **Universal Build Pipeline**: `tsup` single-bundle CJS/ESM ke `dist/index.js` dengan shebang `#!/usr/bin/env node`.
 - [x] **Executable Automation Scripts (`scripts/`)**:
   - `scripts/audit-doku.mjs`: Scanner keamanan statis.
@@ -74,7 +77,7 @@
   - Dokumentasi isolasi data dan kepatuhan UU PDP No. 27/2022 (sanitisasi PII customer di log).
   - Panduan penanganan retensi dan penghapusan data transaksi.
 
-### Phase 2 Features (Should Have — v1.3.0)
+### Phase 2 Features (Should Have â€” v1.3.0)
 - [ ] Dukungan SNAP BI Asymmetric RSA-SHA256 untuk B2B Access Token (`POST /v1.0/access-token/b2b`).
 - [ ] Interactive Sandbox Simulator Webhook Tunnel via ngrok/localtunnel integration.
 
@@ -98,19 +101,19 @@
 
 ```
 [MCP Client: Claude / AGY] 
-       │ (JSON-RPC 2.0 over Stdio)
-       ▼
+       â”‚ (JSON-RPC 2.0 over Stdio)
+       â–¼
 [DOKU MCP Server (src/index.ts)]
-       │
-       ├─► Tools Handler (create_checkout, create_va, create_qris, ...)
-       │        │
-       │        ▼
-       ├─► Cryptographic Signer (src/core/signer.ts)
-       │        │ (Digest SHA256 + Component String + HMAC-SHA256 / SHA512)
-       │        ▼
-       └─► DOKU HTTP Client (src/core/client.ts)
-                │ (HTTPS POST/GET with Client-Id, Request-Id, Timestamp, Signature)
-                ▼
+       â”‚
+       â”œâ”€â–º Tools Handler (create_checkout, create_va, create_qris, ...)
+       â”‚        â”‚
+       â”‚        â–¼
+       â”œâ”€â–º Cryptographic Signer (src/core/signer.ts)
+       â”‚        â”‚ (Digest SHA256 + Component String + HMAC-SHA256 / SHA512)
+       â”‚        â–¼
+       â””â”€â–º DOKU HTTP Client (src/core/client.ts)
+                â”‚ (HTTPS POST/GET with Client-Id, Request-Id, Timestamp, Signature)
+                â–¼
       [DOKU Gateway: Sandbox / Production]
 ```
 

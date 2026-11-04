@@ -1,6 +1,6 @@
 /**
  * DOKU Payment Gateway API Constants
- * Conforming to Jokul API v2 & SNAP API v1.0 specifications
+ * Strictly updated based on official specifications at https://developers.doku.com/
  */
 
 export const DOKU_SANDBOX_BASE_URL = 'https://api-sandbox.doku.com';
@@ -9,15 +9,20 @@ export const DOKU_PRODUCTION_BASE_URL = 'https://api.doku.com';
 export const DOKU_SIMULATOR_URL = 'https://sandbox.doku.com/gtw-config-v2/simulator';
 
 export const DOKU_ENDPOINTS = {
+  // Jokul API v2 (Direct & Hosted)
   CHECKOUT_PAYMENT: '/checkout/v1/payment',
   CHECKOUT_CANCEL: '/checkout/v3/cancellations',
   VIRTUAL_ACCOUNT: '/doku-virtual-account/v2/payment-code',
   QRIS_JOKUL: '/qris/v1/payment-code',
-  QRIS_SNAP: '/snap-adapter/b2b/v1.0/qr/qr-mpm-generate',
   E_WALLET: '/e-wallet/v1/payment',
   CREDIT_CARD: '/credit-card/v1/payment',
   STATUS: '/orders/v1/status',
   REFUND: '/orders/v1/refund',
+
+  // BI-SNAP Open API Standards (developers.doku.com)
+  SNAP_B2B_TOKEN: '/authorization/v1/access-token/b2b',
+  SNAP_QRIS_MPM: '/snap-adapter/b2b/v1.0/qr/qr-mpm-generate',
+  SNAP_VA_CREATE: '/virtual-accounts/bi-snap-va/v1.1/transfer-va/create-va',
 } as const;
 
 export const SUPPORTED_VA_BANKS = [
@@ -62,4 +67,3 @@ export const PAYMENT_METHOD_TYPES = [
   'ALFAMART',
   'INDOMARET',
 ] as const;
-

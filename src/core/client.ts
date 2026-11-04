@@ -6,19 +6,27 @@ import {
   CheckoutCancelRequest,
   VirtualAccountRequest,
   QrisPaymentRequest,
+  SnapQrisPaymentRequest,
   EwalletPaymentRequest,
   RefundRequest,
+  SnapB2bTokenResponse,
 } from './types.js';
 import {
   DOKU_SANDBOX_BASE_URL,
   DOKU_PRODUCTION_BASE_URL,
   DOKU_ENDPOINTS,
 } from './constants.js';
-import { generateDokuTimestamp, calculateJokulSignature } from './signer.js';
+import {
+  generateDokuTimestamp,
+  calculateJokulSignature,
+  calculateSnapAsymmetricSignature,
+  calculateSnapSignature,
+} from './signer.js';
 
 export class DokuClient {
   private clientId: string;
   private secretKey: string;
+  private privateKeyPem?: string;
   private baseUrl: string;
   private isProduction: boolean;
   private http: AxiosInstance;
@@ -28,6 +36,8 @@ export class DokuClient {
       config?.clientId || process.env.DOKU_CLIENT_ID || '';
     this.secretKey =
       config?.secretKey || process.env.DOKU_SECRET_KEY || '';
+    this.privateKeyPem =
+      config?.privateKeyPem || process.env.DOKU_PRIVATE_KEY_PEM || '';
 
     // Default to Sandbox for absolute safety
     this.isProduction =
@@ -48,11 +58,17 @@ export class DokuClient {
     });
   }
 
-  public getEnvironment(): { isProduction: boolean; baseUrl: string; hasCredentials: boolean } {
+  public getEnvironment(): {
+    isProduction: boolean;
+    baseUrl: string;
+    hasCredentials: boolean;
+    hasPrivateKey: boolean;
+  } {
     return {
       isProduction: this.isProduction,
       baseUrl: this.baseUrl,
       hasCredentials: Boolean(this.clientId && this.secretKey),
+      hasPrivateKey: Boolean(this.privateKeyPem),
     };
   }
 
@@ -100,11 +116,16 @@ export class DokuClient {
       return response.data;
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        const axiosErr = err as AxiosError<{ error?: { message?: string; code?: string }; message?: string }>;
+        const axiosErr = err as AxiosError<{
+          error?: { message?: string; code?: string };
+          message?: string;
+          responseMessage?: string;
+        }>;
         const status = axiosErr.response?.status;
         const responseData = axiosErr.response?.data;
         const errorMessage =
           responseData?.error?.message ||
+          responseData?.responseMessage ||
           responseData?.message ||
           axiosErr.message ||
           'DOKU API Request Failed';
@@ -114,6 +135,109 @@ export class DokuClient {
         );
       }
 
+      throw err;
+    }
+  }
+
+  /**
+   * Requests a SNAP BI B2B Access Token using Asymmetric RSA-SHA256 signature
+   * Endpoint: POST /authorization/v1/access-token/b2b
+   */
+  public async getSnapB2bToken(customPrivateKeyPem?: string): Promise<SnapB2bTokenResponse> {
+    const privateKey = customPrivateKeyPem || this.privateKeyPem;
+    if (!this.clientId || !privateKey) {
+      throw new Error(
+        'Missing DOKU Client ID or RSA Private Key PEM (DOKU_PRIVATE_KEY_PEM) for SNAP Asymmetric Token request.'
+      );
+    }
+
+    const timestamp = generateDokuTimestamp();
+    const { signature } = calculateSnapAsymmetricSignature({
+      clientKey: this.clientId,
+      timestamp,
+      privateKeyPem: privateKey,
+    });
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'X-CLIENT-KEY': this.clientId,
+      'X-TIMESTAMP': timestamp,
+      'X-SIGNATURE': signature,
+    };
+
+    const body = {
+      grantType: 'client_credentials',
+    };
+
+    try {
+      const response = await this.http.post<SnapB2bTokenResponse>(
+        DOKU_ENDPOINTS.SNAP_B2B_TOKEN,
+        body,
+        { headers }
+      );
+      return response.data;
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const axiosErr = err as AxiosError<{ responseMessage?: string; message?: string }>;
+        const status = axiosErr.response?.status;
+        const msg =
+          axiosErr.response?.data?.responseMessage ||
+          axiosErr.response?.data?.message ||
+          axiosErr.message;
+        throw new Error(`DOKU SNAP Token Error [HTTP ${status}]: ${msg}`);
+      }
+      throw err;
+    }
+  }
+
+  /**
+   * Generates a dynamic QRIS code conforming to SNAP BI Standard
+   * Endpoint: POST /snap-adapter/b2b/v1.0/qr/qr-mpm-generate
+   */
+  public async createSnapQrisPayment(
+    payload: SnapQrisPaymentRequest,
+    accessToken: string
+  ): Promise<unknown> {
+    if (!this.clientId || !this.secretKey) {
+      throw new Error('Missing DOKU Client ID or Secret Key.');
+    }
+
+    const timestamp = generateDokuTimestamp();
+    const externalId = Date.now().toString().slice(-8) + Math.floor(Math.random() * 1000);
+    const targetPath = DOKU_ENDPOINTS.SNAP_QRIS_MPM;
+
+    const { signature } = calculateSnapSignature({
+      httpMethod: 'POST',
+      endpointUrl: targetPath,
+      accessToken,
+      secretKey: this.secretKey,
+      timestamp,
+      body: payload,
+    });
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: accessToken.startsWith('Bearer ') ? accessToken : `Bearer ${accessToken}`,
+      'X-PARTNER-ID': this.clientId,
+      'X-EXTERNAL-ID': externalId,
+      'X-TIMESTAMP': timestamp,
+      'X-SIGNATURE': signature,
+      'CHANNEL-ID': 'H2H',
+    };
+
+    try {
+      const response = await this.http.post(targetPath, payload, { headers });
+      return response.data;
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const axiosErr = err as AxiosError<{ responseMessage?: string; message?: string }>;
+        const status = axiosErr.response?.status;
+        const msg =
+          axiosErr.response?.data?.responseMessage ||
+          axiosErr.response?.data?.message ||
+          axiosErr.message;
+        throw new Error(`DOKU SNAP QRIS Error [HTTP ${status}]: ${msg}`);
+      }
       throw err;
     }
   }
@@ -163,12 +287,11 @@ export class DokuClient {
       },
     };
 
-    // Bank specific path or generic Jokul VA
     return this.request('POST', DOKU_ENDPOINTS.VIRTUAL_ACCOUNT, body);
   }
 
   /**
-   * Generates a dynamic QRIS payment code
+   * Generates a dynamic QRIS payment code (Jokul v2 Standard)
    * POST /qris/v1/payment-code
    */
   public async createQrisPayment(payload: QrisPaymentRequest): Promise<unknown> {
@@ -234,4 +357,3 @@ export class DokuClient {
     return this.request('POST', DOKU_ENDPOINTS.REFUND, body);
   }
 }
-

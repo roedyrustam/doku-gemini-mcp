@@ -11,6 +11,7 @@ import { qrisTools, handleQrisTool } from './tools/qris.js';
 import { ewalletTools, handleEwalletTool } from './tools/ewallet.js';
 import { statusTools, handleStatusTool } from './tools/status.js';
 import { refundTools, handleRefundTool } from './tools/refund.js';
+import { snapTools, handleSnapTool } from './tools/snap.js';
 
 // Export core SDK utilities for library consumers and scripts
 export * from './core/constants.js';
@@ -26,6 +27,7 @@ const allTools = [
   ...ewalletTools,
   ...statusTools,
   ...refundTools,
+  ...snapTools,
 ];
 
 async function main() {
@@ -40,6 +42,9 @@ async function main() {
   console.error(`[doku-gemini-mcp] Base URL: ${env.baseUrl}`);
   console.error(
     `[doku-gemini-mcp] Credentials configured: ${env.hasCredentials ? 'YES' : 'NO (Set DOKU_CLIENT_ID & DOKU_SECRET_KEY)'}`
+  );
+  console.error(
+    `[doku-gemini-mcp] SNAP Private Key: ${env.hasPrivateKey ? 'CONFIGURED' : 'NOT SET (Required for SNAP B2B Token)'}`
   );
 
   const server = new Server(
@@ -78,6 +83,8 @@ async function main() {
         result = await handleStatusTool(name, args, client);
       } else if (name === 'process_refund') {
         result = await handleRefundTool(name, args, client);
+      } else if (name === 'get_snap_b2b_token' || name === 'create_snap_qris_payment') {
+        result = await handleSnapTool(name, args, client);
       } else {
         throw new Error(`Unknown MCP Tool: ${name}`);
       }

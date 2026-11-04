@@ -16,11 +16,11 @@ It allows AI agents to perform autonomous financial operations:
 - Checking transaction status.
 
 ```text
-┌───────────────────────────┐         MCP Protocol        ┌───────────────────────────┐         HTTP / REST        ┌───────────────────────────┐
-│                           │  (JSON-RPC over Stdio)     │                           │    (HMAC-SHA256 Signed)   │                           │
-│  AI Agent (Antigravity /  ├────────────────────────────►  DOKU MCP Server             ├───────────────────────────►  DOKU Payment Gateway     │
-│  Claude / Cursor)         │                            │  (TypeScript / Node.js)   │                           │  (Sandbox / Production)   │
-└───────────────────────────┘                            └───────────────────────────┘                           └───────────────────────────┘
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”         MCP Protocol        â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”         HTTP / REST        â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                           â”‚  (JSON-RPC over Stdio)     â”‚                           â”‚    (HMAC-SHA256 Signed)   â”‚                           â”‚
+â”‚  AI Agent (Antigravity /  â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–º  DOKU MCP Server             â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–º  DOKU Payment Gateway     â”‚
+â”‚  Claude / Cursor)         â”‚                            â”‚  (TypeScript / Node.js)   â”‚                           â”‚  (Sandbox / Production)   â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                            â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                           â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
@@ -141,6 +141,57 @@ Initiates an online refund for an existing order.
     "reason": { "type": "string", "description": "Reason for processing the refund" }
   },
   "required": ["invoice_number", "amount", "reason"]
+}
+```
+
+---
+
+### 7. `cancel_checkout_order`
+Cancels an unpaid DOKU Checkout order (`POST /checkout/v3/cancellations`).
+
+**Input Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "invoice_number": { "type": "string", "description": "Target invoice number to cancel" },
+    "reason": { "type": "string", "description": "Cancellation reason" }
+  },
+  "required": ["invoice_number"]
+}
+```
+
+---
+
+### 8. `get_snap_b2b_token`
+Obtains a SNAP BI OAuth 2.0 B2B Access Token using Asymmetric RSA-2048 SHA256withRSA signature (`POST /authorization/v1/access-token/b2b`).
+
+**Input Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "private_key_pem": { "type": "string", "description": "Optional RSA Private Key in PEM format" }
+  }
+}
+```
+
+---
+
+### 9. `create_snap_qris_payment`
+Generates a dynamic QRIS payment code strictly conforming to Bank Indonesia SNAP standard (`POST /snap-adapter/b2b/v1.0/qr/qr-mpm-generate`) with Symmetric HMAC-SHA512 signature.
+
+**Input Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "partner_reference_no": { "type": "string", "description": "Unique partner reference number" },
+    "amount_value": { "type": "string", "description": "Amount in IDR formatted as decimal string (e.g. '25000.00')" },
+    "access_token": { "type": "string", "description": "B2B Access Token obtained from get_snap_b2b_token" },
+    "merchant_id": { "type": "string", "description": "Optional Sub-Merchant ID / Terminal ID" }
+  },
+  "required": ["partner_reference_no", "amount_value", "access_token"]
 }
 ```
 

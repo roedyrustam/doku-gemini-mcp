@@ -17,15 +17,19 @@ var DOKU_SANDBOX_BASE_URL = "https://api-sandbox.doku.com";
 var DOKU_PRODUCTION_BASE_URL = "https://api.doku.com";
 var DOKU_SIMULATOR_URL = "https://sandbox.doku.com/gtw-config-v2/simulator";
 var DOKU_ENDPOINTS = {
+  // Jokul API v2 (Direct & Hosted)
   CHECKOUT_PAYMENT: "/checkout/v1/payment",
   CHECKOUT_CANCEL: "/checkout/v3/cancellations",
   VIRTUAL_ACCOUNT: "/doku-virtual-account/v2/payment-code",
   QRIS_JOKUL: "/qris/v1/payment-code",
-  QRIS_SNAP: "/snap-adapter/b2b/v1.0/qr/qr-mpm-generate",
   E_WALLET: "/e-wallet/v1/payment",
   CREDIT_CARD: "/credit-card/v1/payment",
   STATUS: "/orders/v1/status",
-  REFUND: "/orders/v1/refund"
+  REFUND: "/orders/v1/refund",
+  // BI-SNAP Open API Standards (developers.doku.com)
+  SNAP_B2B_TOKEN: "/authorization/v1/access-token/b2b",
+  SNAP_QRIS_MPM: "/snap-adapter/b2b/v1.0/qr/qr-mpm-generate",
+  SNAP_VA_CREATE: "/virtual-accounts/bi-snap-va/v1.1/transfer-va/create-va"
 };
 var SUPPORTED_VA_BANKS = [
   "BCA",
@@ -98,14 +102,27 @@ Digest:${digest}`;
     signature
   };
 }
+function calculateSnapAsymmetricSignature(params) {
+  const { clientKey, timestamp, privateKeyPem } = params;
+  const stringToSign = `${clientKey}|${timestamp}`;
+  const signer = crypto.createSign("RSA-SHA256");
+  signer.update(stringToSign, "utf8");
+  signer.end();
+  const signature = signer.sign(privateKeyPem, "base64");
+  return {
+    stringToSign,
+    signature
+  };
+}
 function calculateSnapSignature(params) {
   const { httpMethod, endpointUrl, accessToken, secretKey, timestamp, body } = params;
+  const cleanAccessToken = accessToken.replace(/^Bearer\s+/i, "");
   let minifiedBody = "";
   if (body) {
     minifiedBody = typeof body === "string" ? body : JSON.stringify(body);
   }
   const bodyHash = crypto.createHash("sha256").update(minifiedBody, "utf8").digest("hex").toLowerCase();
-  const stringToSign = `${httpMethod.toUpperCase()}:${endpointUrl}:${accessToken}:${bodyHash}:${timestamp}`;
+  const stringToSign = `${httpMethod.toUpperCase()}:${endpointUrl}:${cleanAccessToken}:${bodyHash}:${timestamp}`;
   const hmac = crypto.createHmac("sha512", secretKey);
   hmac.update(stringToSign, "utf8");
   const signature = hmac.digest("base64");
@@ -143,17 +160,47 @@ function verifyWebhookSignature(params) {
   }
   return crypto.timingSafeEqual(expectedBuffer, receivedBuffer);
 }
+function verifySnapWebhookSignature(params) {
+  const {
+    httpMethod,
+    endpointUrl,
+    accessToken = "",
+    timestamp,
+    signature,
+    secretKey,
+    rawBody
+  } = params;
+  if (!httpMethod || !endpointUrl || !timestamp || !signature || !secretKey) {
+    return false;
+  }
+  const expected = calculateSnapSignature({
+    httpMethod,
+    endpointUrl,
+    accessToken,
+    secretKey,
+    timestamp,
+    body: rawBody
+  });
+  const expectedBuffer = Buffer.from(expected.signature, "utf8");
+  const receivedBuffer = Buffer.from(signature, "utf8");
+  if (expectedBuffer.length !== receivedBuffer.length) {
+    return false;
+  }
+  return crypto.timingSafeEqual(expectedBuffer, receivedBuffer);
+}
 
 // src/core/client.ts
 var DokuClient = class {
   clientId;
   secretKey;
+  privateKeyPem;
   baseUrl;
   isProduction;
   http;
   constructor(config) {
     this.clientId = config?.clientId || process.env.DOKU_CLIENT_ID || "";
     this.secretKey = config?.secretKey || process.env.DOKU_SECRET_KEY || "";
+    this.privateKeyPem = config?.privateKeyPem || process.env.DOKU_PRIVATE_KEY_PEM || "";
     this.isProduction = config?.isProduction ?? (process.env.DOKU_IS_PRODUCTION === "true" || process.env.NODE_ENV === "production");
     this.baseUrl = this.isProduction ? DOKU_PRODUCTION_BASE_URL : DOKU_SANDBOX_BASE_URL;
     this.http = axios.create({
@@ -168,7 +215,8 @@ var DokuClient = class {
     return {
       isProduction: this.isProduction,
       baseUrl: this.baseUrl,
-      hasCredentials: Boolean(this.clientId && this.secretKey)
+      hasCredentials: Boolean(this.clientId && this.secretKey),
+      hasPrivateKey: Boolean(this.privateKeyPem)
     };
   }
   /**
@@ -209,10 +257,94 @@ var DokuClient = class {
         const axiosErr = err;
         const status = axiosErr.response?.status;
         const responseData = axiosErr.response?.data;
-        const errorMessage = responseData?.error?.message || responseData?.message || axiosErr.message || "DOKU API Request Failed";
+        const errorMessage = responseData?.error?.message || responseData?.responseMessage || responseData?.message || axiosErr.message || "DOKU API Request Failed";
         throw new Error(
           `DOKU API Error [HTTP ${status || "Network"}]: ${errorMessage} (Target: ${targetPath})`
         );
+      }
+      throw err;
+    }
+  }
+  /**
+   * Requests a SNAP BI B2B Access Token using Asymmetric RSA-SHA256 signature
+   * Endpoint: POST /authorization/v1/access-token/b2b
+   */
+  async getSnapB2bToken(customPrivateKeyPem) {
+    const privateKey = customPrivateKeyPem || this.privateKeyPem;
+    if (!this.clientId || !privateKey) {
+      throw new Error(
+        "Missing DOKU Client ID or RSA Private Key PEM (DOKU_PRIVATE_KEY_PEM) for SNAP Asymmetric Token request."
+      );
+    }
+    const timestamp = generateDokuTimestamp();
+    const { signature } = calculateSnapAsymmetricSignature({
+      clientKey: this.clientId,
+      timestamp,
+      privateKeyPem: privateKey
+    });
+    const headers = {
+      "Content-Type": "application/json",
+      "X-CLIENT-KEY": this.clientId,
+      "X-TIMESTAMP": timestamp,
+      "X-SIGNATURE": signature
+    };
+    const body = {
+      grantType: "client_credentials"
+    };
+    try {
+      const response = await this.http.post(
+        DOKU_ENDPOINTS.SNAP_B2B_TOKEN,
+        body,
+        { headers }
+      );
+      return response.data;
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        const axiosErr = err;
+        const status = axiosErr.response?.status;
+        const msg = axiosErr.response?.data?.responseMessage || axiosErr.response?.data?.message || axiosErr.message;
+        throw new Error(`DOKU SNAP Token Error [HTTP ${status}]: ${msg}`);
+      }
+      throw err;
+    }
+  }
+  /**
+   * Generates a dynamic QRIS code conforming to SNAP BI Standard
+   * Endpoint: POST /snap-adapter/b2b/v1.0/qr/qr-mpm-generate
+   */
+  async createSnapQrisPayment(payload, accessToken) {
+    if (!this.clientId || !this.secretKey) {
+      throw new Error("Missing DOKU Client ID or Secret Key.");
+    }
+    const timestamp = generateDokuTimestamp();
+    const externalId = Date.now().toString().slice(-8) + Math.floor(Math.random() * 1e3);
+    const targetPath = DOKU_ENDPOINTS.SNAP_QRIS_MPM;
+    const { signature } = calculateSnapSignature({
+      httpMethod: "POST",
+      endpointUrl: targetPath,
+      accessToken,
+      secretKey: this.secretKey,
+      timestamp,
+      body: payload
+    });
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: accessToken.startsWith("Bearer ") ? accessToken : `Bearer ${accessToken}`,
+      "X-PARTNER-ID": this.clientId,
+      "X-EXTERNAL-ID": externalId,
+      "X-TIMESTAMP": timestamp,
+      "X-SIGNATURE": signature,
+      "CHANNEL-ID": "H2H"
+    };
+    try {
+      const response = await this.http.post(targetPath, payload, { headers });
+      return response.data;
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        const axiosErr = err;
+        const status = axiosErr.response?.status;
+        const msg = axiosErr.response?.data?.responseMessage || axiosErr.response?.data?.message || axiosErr.message;
+        throw new Error(`DOKU SNAP QRIS Error [HTTP ${status}]: ${msg}`);
       }
       throw err;
     }
@@ -262,7 +394,7 @@ var DokuClient = class {
     return this.request("POST", DOKU_ENDPOINTS.VIRTUAL_ACCOUNT, body);
   }
   /**
-   * Generates a dynamic QRIS payment code
+   * Generates a dynamic QRIS payment code (Jokul v2 Standard)
    * POST /qris/v1/payment-code
    */
   async createQrisPayment(payload) {
@@ -654,6 +786,73 @@ async function handleRefundTool(name, args, client) {
   throw new Error(`Unknown refund tool: ${name}`);
 }
 
+// src/tools/snap.ts
+var snapTools = [
+  {
+    name: "get_snap_b2b_token",
+    description: "Obtain a SNAP BI OAuth 2.0 B2B Access Token using Asymmetric RSA-2048 SHA256withRSA signature (POST /authorization/v1/access-token/b2b). Requires DOKU_CLIENT_ID and Merchant Private Key.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        private_key_pem: {
+          type: "string",
+          description: "Optional RSA Private Key in PEM format (defaults to DOKU_PRIVATE_KEY_PEM environment variable)."
+        }
+      }
+    }
+  },
+  {
+    name: "create_snap_qris_payment",
+    description: "Generate a dynamic QRIS payment code strictly conforming to Bank Indonesia SNAP standard (POST /snap-adapter/b2b/v1.0/qr/qr-mpm-generate) with Symmetric HMAC-SHA512 signature.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        partner_reference_no: {
+          type: "string",
+          description: "Unique partner transaction reference number / invoice ID."
+        },
+        amount_value: {
+          type: "string",
+          description: 'Amount in IDR formatted as decimal string (e.g. "25000.00").'
+        },
+        access_token: {
+          type: "string",
+          description: "B2B OAuth Access Token obtained via get_snap_b2b_token API."
+        },
+        merchant_id: {
+          type: "string",
+          description: "Optional Sub-Merchant ID / Terminal ID."
+        }
+      },
+      required: ["partner_reference_no", "amount_value", "access_token"]
+    }
+  }
+];
+async function handleSnapTool(name, args, client) {
+  if (name === "get_snap_b2b_token") {
+    const privateKey = args.private_key_pem ? String(args.private_key_pem) : void 0;
+    return client.getSnapB2bToken(privateKey);
+  }
+  if (name === "create_snap_qris_payment") {
+    const partnerReferenceNo = String(args.partner_reference_no);
+    const amountValue = String(args.amount_value);
+    const accessToken = String(args.access_token);
+    const merchantId = args.merchant_id ? String(args.merchant_id) : void 0;
+    return client.createSnapQrisPayment(
+      {
+        partnerReferenceNo,
+        amount: {
+          value: amountValue,
+          currency: "IDR"
+        },
+        merchantId
+      },
+      accessToken
+    );
+  }
+  throw new Error(`Unknown SNAP tool: ${name}`);
+}
+
 // src/index.ts
 var allTools = [
   ...checkoutTools,
@@ -661,7 +860,8 @@ var allTools = [
   ...qrisTools,
   ...ewalletTools,
   ...statusTools,
-  ...refundTools
+  ...refundTools,
+  ...snapTools
 ];
 async function main() {
   const client = new DokuClient();
@@ -673,6 +873,9 @@ async function main() {
   console.error(`[doku-gemini-mcp] Base URL: ${env.baseUrl}`);
   console.error(
     `[doku-gemini-mcp] Credentials configured: ${env.hasCredentials ? "YES" : "NO (Set DOKU_CLIENT_ID & DOKU_SECRET_KEY)"}`
+  );
+  console.error(
+    `[doku-gemini-mcp] SNAP Private Key: ${env.hasPrivateKey ? "CONFIGURED" : "NOT SET (Required for SNAP B2B Token)"}`
   );
   const server = new Server(
     {
@@ -706,6 +909,8 @@ async function main() {
         result = await handleStatusTool(name, args, client);
       } else if (name === "process_refund") {
         result = await handleRefundTool(name, args, client);
+      } else if (name === "get_snap_b2b_token" || name === "create_snap_qris_payment") {
+        result = await handleSnapTool(name, args, client);
       } else {
         throw new Error(`Unknown MCP Tool: ${name}`);
       }
@@ -762,8 +967,10 @@ export {
   allTools,
   calculateDigest,
   calculateJokulSignature,
+  calculateSnapAsymmetricSignature,
   calculateSnapSignature,
   generateDokuTimestamp,
+  verifySnapWebhookSignature,
   verifyWebhookSignature
 };
 //# sourceMappingURL=index.js.map

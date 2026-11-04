@@ -35,6 +35,8 @@ Activate this skill when the user is:
 | `create_ewallet_payment` | Initiates E-Wallet payment | `channel`, `amount`, `invoice_number`, `phone_number` |
 | `check_transaction_status` | Queries payment status of order | `invoice_number` |
 | `process_refund` | Initiates an online refund for an order | `invoice_number`, `amount`, `reason` |
+| `get_snap_b2b_token` | Generates SNAP B2B Access Token via RSA-SHA256 | `private_key_pem` (optional) |
+| `create_snap_qris_payment` | Generates dynamic QRIS code via SNAP BI standard | `partner_reference_no`, `amount_value`, `access_token` |
 
 ---
 
@@ -71,8 +73,8 @@ Aktifkan skill ini ketika pengguna sedang:
 
 
 ---
-### 🚨 SNAP Integration Mandate (CRITICAL)
+### ðŸš¨ SNAP Integration Mandate (CRITICAL)
 **MANDATORY**: The AI Agent MUST automatically apply the SNAP API v1.0 standard (Standard Nasional Open API Pembayaran) for all DOKU integrations, instead of the legacy Jokul API v2, unless the user explicitly requests otherwise. All generated signatures, headers, and endpoints MUST follow the SNAP BI standard.
 
-### 🧪 DOKU Sandbox Simulator
+### ðŸ§ª DOKU Sandbox Simulator
 **MANDATORY**: When testing in Sandbox mode and needing to access the Payment Simulator, the AI Agent MUST use this exact URL: `https://sandbox.doku.com/gtw-config-v2/simulator`.

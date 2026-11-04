@@ -3,6 +3,7 @@ import { SupportedVaBank, SupportedEwallet } from './constants.js';
 export interface DokuConfig {
   clientId: string;
   secretKey: string;
+  privateKeyPem?: string;
   isProduction?: boolean;
 }
 
@@ -15,10 +16,16 @@ export interface JokulSignatureParams {
   body?: object | string;
 }
 
+export interface SnapAsymmetricSignatureParams {
+  clientKey: string;
+  timestamp: string; // ISO8601 UTC+0: YYYY-MM-DDTHH:mm:ssZ
+  privateKeyPem: string;
+}
+
 export interface SnapSignatureParams {
   httpMethod: 'GET' | 'POST' | 'PUT' | 'DELETE';
   endpointUrl: string;
-  accessToken: string;
+  accessToken: string; // Without 'Bearer ' prefix
   secretKey: string;
   timestamp: string;
   body?: object | string;
@@ -32,6 +39,16 @@ export interface WebhookVerificationParams {
   signature: string;
   secretKey: string;
   rawBody: string | object;
+}
+
+export interface SnapWebhookVerificationParams {
+  httpMethod: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  endpointUrl: string;
+  accessToken?: string;
+  timestamp: string;
+  signature: string;
+  secretKey: string;
+  rawBody?: string | object;
 }
 
 export interface CheckoutPaymentRequest {
@@ -100,6 +117,18 @@ export interface QrisPaymentRequest {
   callback_url?: string;
 }
 
+export interface SnapQrisPaymentRequest {
+  partnerReferenceNo: string;
+  amount: {
+    value: string; // SNAP requires decimal string format e.g. "10000.00"
+    currency: string; // "IDR"
+  };
+  merchantId?: string;
+  terminalId?: string;
+  validityPeriod?: string; // ISO8601 with timezone
+  additionalInfo?: Record<string, unknown>;
+}
+
 export interface EwalletPaymentRequest {
   channel: SupportedEwallet;
   amount: number;
@@ -120,11 +149,10 @@ export interface RefundRequest {
   refund_id?: string;
 }
 
-export interface DokuErrorResponse {
-  error: {
-    message: string;
-    code?: string;
-    details?: unknown;
-  };
+export interface SnapB2bTokenResponse {
+  responseCode: string;
+  responseMessage: string;
+  accessToken: string;
+  tokenType: string;
+  expiresIn: string | number;
 }
-

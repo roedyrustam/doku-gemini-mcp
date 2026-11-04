@@ -5,6 +5,7 @@ import { qrisTools } from '../src/tools/qris.js';
 import { ewalletTools } from '../src/tools/ewallet.js';
 import { statusTools } from '../src/tools/status.js';
 import { refundTools } from '../src/tools/refund.js';
+import { snapTools } from '../src/tools/snap.js';
 import { DokuClient } from '../src/core/client.js';
 
 describe('MCP Tools Schema & Sandbox Defaulting', () => {
@@ -15,12 +16,14 @@ describe('MCP Tools Schema & Sandbox Defaulting', () => {
     ...ewalletTools,
     ...statusTools,
     ...refundTools,
+    ...snapTools,
   ];
 
-  it('exposes exactly 7 core MCP tools with valid names and schemas', () => {
-    expect(allTools.length).toBe(7);
+  it('exposes exactly 9 core MCP tools with valid names and schemas', () => {
+    expect(allTools.length).toBe(9);
 
     const toolNames = allTools.map((t) => t.name);
+    // Jokul v2 Tools
     expect(toolNames).toContain('create_checkout_payment');
     expect(toolNames).toContain('cancel_checkout_order');
     expect(toolNames).toContain('create_virtual_account');
@@ -28,6 +31,10 @@ describe('MCP Tools Schema & Sandbox Defaulting', () => {
     expect(toolNames).toContain('create_ewallet_payment');
     expect(toolNames).toContain('check_transaction_status');
     expect(toolNames).toContain('process_refund');
+
+    // BI-SNAP Standards Tools
+    expect(toolNames).toContain('get_snap_b2b_token');
+    expect(toolNames).toContain('create_snap_qris_payment');
 
     for (const tool of allTools) {
       expect(tool.description).toBeTruthy();
@@ -58,4 +65,3 @@ describe('MCP Tools Schema & Sandbox Defaulting', () => {
     ).rejects.toThrow('Missing DOKU credentials');
   });
 });
-

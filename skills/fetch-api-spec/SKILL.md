@@ -27,10 +27,13 @@ Activate this skill when the user says:
 ### Step-by-Step Execution Protocol
 
 1. **Verify Target Core Endpoints**:
-   - Checkout API: `/checkout/v1/payment`
-   - Virtual Account API: `/doku-virtual-account/v2/payment-code`
-   - QRIS API (Jokul): `/qris/v1/payment-code`
-   - QRIS API (SNAP): `/snap-adapter/b2b/v1.0/qr/qr-mpm-generate`
+   - Checkout Initiate API: `/checkout/v1/payment`
+   - Checkout Cancellation API: `/checkout/v3/cancellations`
+   - Virtual Account API (Jokul v2): `/doku-virtual-account/v2/payment-code`
+   - Virtual Account API (BI-SNAP): `/virtual-accounts/bi-snap-va/v1.1/transfer-va/create-va`
+   - QRIS API (Jokul v2): `/qris/v1/payment-code`
+   - QRIS API (SNAP MPM): `/snap-adapter/b2b/v1.0/qr/qr-mpm-generate`
+   - SNAP B2B Token API: `/authorization/v1/access-token/b2b`
    - E-Wallet API: `/e-wallet/v1/payment`
    - Direct Card API: `/credit-card/v1/payment`
    - Status Inquiry API: `/orders/v1/status/:invoice_number`
@@ -38,23 +41,31 @@ Activate this skill when the user says:
 
 2. **Validate Mandatory Headers Standard**:
    - Jokul v2: `Client-Id`, `Request-Id`, `Request-Timestamp`, `Signature`. (Note: `Request-Target` and `Digest` are used for Signature string, NOT as headers).
-   - SNAP v1.0: `X-TIMESTAMP`, `X-SIGNATURE`, `X-CLIENT-KEY`, `X-PARTNER-ID`, `X-EXTERNAL-ID`, `CHANNEL-ID`.
+   - SNAP v1.0 Asymmetric: `Content-Type: application/json`, `X-CLIENT-KEY`, `X-TIMESTAMP`, `X-SIGNATURE` (SHA256withRSA).
+   - SNAP v1.0 Symmetric: `Authorization: Bearer <token>`, `X-PARTNER-ID`, `X-EXTERNAL-ID`, `X-TIMESTAMP`, `X-SIGNATURE` (HMAC-SHA512), `CHANNEL-ID`.
 
 3. **Generate Local Spec Cache (`.doku-spec.json`)**:
    ```json
    {
      "apiVersion": "v2",
      "snapVersion": "v1.0",
-     "lastUpdated": "2026-08-09T00:00:00Z",
+     "lastUpdated": "2026-11-05T00:00:00Z",
      "endpoints": {
        "checkout": "/checkout/v1/payment",
+       "checkoutCancel": "/checkout/v3/cancellations",
        "virtualAccount": "/doku-virtual-account/v2/payment-code",
+       "snapVirtualAccount": "/virtual-accounts/bi-snap-va/v1.1/transfer-va/create-va",
        "qrisJokul": "/qris/v1/payment-code",
        "qrisSnap": "/snap-adapter/b2b/v1.0/qr/qr-mpm-generate",
+       "snapB2bToken": "/authorization/v1/access-token/b2b",
        "status": "/orders/v1/status",
        "refund": "/orders/v1/refund"
      },
-     "signatureAlgorithm": "HMACSHA256"
+     "signatureAlgorithms": {
+       "jokul": "HMACSHA256",
+       "snapAsymmetric": "SHA256withRSA",
+       "snapSymmetric": "HMAC-SHA512"
+     }
    }
    ```
 
@@ -74,8 +85,8 @@ Aktifkan skill ini ketika pengguna mengatakan:
 
 
 ---
-### 🚨 SNAP Integration Mandate (CRITICAL)
+### ðŸš¨ SNAP Integration Mandate (CRITICAL)
 **MANDATORY**: The AI Agent MUST automatically apply the SNAP API v1.0 standard (Standard Nasional Open API Pembayaran) for all DOKU integrations, instead of the legacy Jokul API v2, unless the user explicitly requests otherwise. All generated signatures, headers, and endpoints MUST follow the SNAP BI standard.
 
-### 🧪 DOKU Sandbox Simulator
+### ðŸ§ª DOKU Sandbox Simulator
 **MANDATORY**: When testing in Sandbox mode and needing to access the Payment Simulator, the AI Agent MUST use this exact URL: `https://sandbox.doku.com/gtw-config-v2/simulator`.

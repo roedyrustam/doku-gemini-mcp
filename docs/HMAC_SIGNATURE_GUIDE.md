@@ -47,17 +47,56 @@ HMAC-SHA256(SecretKey, ComponentString) -> Base64 Encode -> Prepend "HMACSHA256=
 
 ---
 
-## 2.1 SNAP Symmetric Signature Calculation
+## 2.1 SNAP Asymmetric Signature Calculation (Get Token B2B)
 
-For DOKU SNAP Adapter endpoints:
+Based on official [DOKU SNAP Documentation (developers.doku.com)](https://developers.doku.com/), generating an OAuth 2.0 B2B Access Token via `POST /authorization/v1/access-token/b2b` requires an **Asymmetric Signature** using RSA-2048:
+
 - **String to Sign Assembly**:
   ```text
-  HTTPMethod + ":" + EndpointUrl + ":" + AccessToken + ":" + Lowercase(HexEncode(SHA-256(MinifiedRequestBody))) + ":" + Timestamp
+  stringToSign = X-CLIENT-KEY + "|" + X-TIMESTAMP
   ```
+- **Signing Algorithm**:
+  `SHA256withRSA` using Merchant RSA Private Key (PEM format), Base64 encoded.
+- **Mandatory Request Headers**:
+  - `Content-Type`: `application/json`
+  - `X-CLIENT-KEY`: Merchant Client ID / Partner ID
+  - `X-TIMESTAMP`: ISO8601 UTC+0 (`YYYY-MM-DDThh:mm:ssZ`)
+  - `X-SIGNATURE`: Base64 RSA-SHA256 signature
+- **Request Body**:
+  ```json
+  {
+    "grantType": "client_credentials"
+  }
+  ```
+
+---
+
+## 2.2 SNAP Symmetric Signature Calculation (Transactional Endpoints)
+
+For DOKU SNAP Adapter and BI-SNAP transactional endpoints (`/snap-adapter/b2b/v1.0/qr/qr-mpm-generate`, `/virtual-accounts/bi-snap-va/v1.1/transfer-va/create-va`, etc.):
+
+- **String to Sign Assembly**:
+  ```text
+  HTTPMethod + ":" + EndpointUrl + ":" + AccessToken + ":" + Lowercase(HexEncode(SHA-256(minify(RequestBody)))) + ":" + TimeStamp
+  ```
+  > [!IMPORTANT]
+  > 1. `AccessToken`: The OAuth B2B token **WITHOUT** the `Bearer ` prefix.
+  > 2. `minify(RequestBody)`: JSON body stripped of all unnecessary spaces, tabs, and newlines.
+  > 3. `HexEncode(SHA-256(...))`: Must be **strictly lowercase** hexadecimal.
+
 - **HMAC-SHA512 Signing**:
   ```text
-  HMAC-SHA512(SecretKey, StringToSign) -> Base64 Encode -> Signature Header
+  HMAC-SHA512(SecretKey, StringToSign) -> Base64 Encode -> X-SIGNATURE Header
   ```
+
+- **Mandatory Request Headers**:
+  - `Authorization`: `Bearer <AccessToken>`
+  - `X-PARTNER-ID`: Merchant Client ID
+  - `X-EXTERNAL-ID`: Numeric or UUID string unique per day
+  - `X-TIMESTAMP`: ISO8601 string
+  - `X-SIGNATURE`: Base64 HMAC-SHA512
+  - `CHANNEL-ID`: Channel code (e.g. `H2H` for QRIS)
+  - `Content-Type`: `application/json`
 
 ---
 

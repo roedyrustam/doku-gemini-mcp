@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
 /**
- * Exports ready-to-use Postman Collection v2.1 with dynamic CryptoJS HMAC-SHA256 signature scripts
+ * Exports ready-to-use Postman Collection v2.1 with dynamic CryptoJS HMAC-SHA256 and SNAP HMAC-SHA512 signature scripts
+ * Based on official DOKU Developers Portal specifications (https://developers.doku.com/)
  */
 
 import fs from 'fs';
 import path from 'path';
 
-const preRequestScript = [
+const jokulPreRequestScript = [
   '// Dynamic DOKU Jokul v2 HMAC-SHA256 Signature Generator',
   'const clientId = pm.environment.get("DOKU_CLIENT_ID") || "MCH-MOCK-ID";',
   'const secretKey = pm.environment.get("DOKU_SECRET_KEY") || "SK-MOCK-KEY";',
@@ -40,8 +41,8 @@ const preRequestScript = [
 const collection = {
   info: {
     _postman_id: 'doku-jokul-mcp-collection-v2',
-    name: 'DOKU Payment Gateway (Jokul API v2)',
-    description: 'Postman Collection with automated HMAC-SHA256 signature pre-request scripts',
+    name: 'DOKU Payment Gateway (Jokul v2 & SNAP BI)',
+    description: 'Official Postman Collection for DOKU Jokul API v2 & SNAP BI v1.0 (developers.doku.com)',
     schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
   },
   event: [
@@ -49,7 +50,7 @@ const collection = {
       listen: 'prerequest',
       script: {
         type: 'text/javascript',
-        exec: preRequestScript.split('\n'),
+        exec: jokulPreRequestScript.split('\n'),
       },
     },
   ],
@@ -59,10 +60,20 @@ const collection = {
       value: 'https://api-sandbox.doku.com',
       type: 'string',
     },
+    {
+      key: 'DOKU_CLIENT_ID',
+      value: 'YOUR_CLIENT_ID',
+      type: 'string',
+    },
+    {
+      key: 'DOKU_SECRET_KEY',
+      value: 'YOUR_SECRET_KEY',
+      type: 'string',
+    },
   ],
   item: [
     {
-      name: 'Checkout',
+      name: 'DOKU Checkout (Hosted & Modal)',
       item: [
         {
           name: 'Generate Payment Link',
@@ -123,10 +134,10 @@ const collection = {
       ],
     },
     {
-      name: 'Virtual Account',
+      name: 'Direct Virtual Account',
       item: [
         {
-          name: 'Create BCA Virtual Account',
+          name: 'Create Virtual Account',
           request: {
             method: 'POST',
             url: {
@@ -160,7 +171,7 @@ const collection = {
       ],
     },
     {
-      name: 'QRIS',
+      name: 'Direct QRIS (Jokul v2)',
       item: [
         {
           name: 'Create Dynamic QRIS Code',
@@ -182,6 +193,70 @@ const collection = {
                   qris_info: {
                     store_name: 'DOKU Coffee Shop',
                     expired_time: 30,
+                  },
+                },
+                null,
+                2
+              ),
+            },
+          },
+        },
+      ],
+    },
+    {
+      name: 'SNAP BI Standards (Open API)',
+      item: [
+        {
+          name: 'Get Token B2B (OAuth 2.0)',
+          request: {
+            method: 'POST',
+            url: {
+              raw: '{{BASE_URL}}/authorization/v1/access-token/b2b',
+              host: ['{{BASE_URL}}'],
+              path: ['authorization', 'v1', 'access-token', 'b2b'],
+            },
+            header: [
+              { key: 'X-CLIENT-KEY', value: '{{DOKU_CLIENT_ID}}' },
+              { key: 'X-TIMESTAMP', value: '{{$isoTimestamp}}' },
+              { key: 'X-SIGNATURE', value: 'BASE64_RSA_SHA256_SIGNATURE' },
+            ],
+            body: {
+              mode: 'raw',
+              raw: JSON.stringify(
+                {
+                  grantType: 'client_credentials',
+                },
+                null,
+                2
+              ),
+            },
+          },
+        },
+        {
+          name: 'Generate SNAP QRIS (MPM)',
+          request: {
+            method: 'POST',
+            url: {
+              raw: '{{BASE_URL}}/snap-adapter/b2b/v1.0/qr/qr-mpm-generate',
+              host: ['{{BASE_URL}}'],
+              path: ['snap-adapter', 'b2b', 'v1.0', 'qr', 'qr-mpm-generate'],
+            },
+            header: [
+              { key: 'CHANNEL-ID', value: 'H2H' },
+              { key: 'X-PARTNER-ID', value: '{{DOKU_CLIENT_ID}}' },
+              { key: 'X-EXTERNAL-ID', value: '{{$randomInt}}' },
+              { key: 'X-TIMESTAMP', value: '{{$isoTimestamp}}' },
+              { key: 'Authorization', value: 'Bearer {{SNAP_ACCESS_TOKEN}}' },
+              { key: 'X-SIGNATURE', value: 'BASE64_HMAC_SHA512_SIGNATURE' },
+            ],
+            body: {
+              mode: 'raw',
+              raw: JSON.stringify(
+                {
+                  partnerReferenceNo: 'SNAP-QRIS-001',
+                  amount: {
+                    value: '10000.00',
+                    currency: 'IDR',
                   },
                 },
                 null,
@@ -247,4 +322,3 @@ const outputPath = path.resolve('doku-api-collection.json');
 fs.writeFileSync(outputPath, JSON.stringify(collection, null, 2), 'utf8');
 
 console.log(`✅ Postman Collection exported to: ${outputPath}`);
-

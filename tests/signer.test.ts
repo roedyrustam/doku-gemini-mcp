@@ -5,6 +5,8 @@ import {
   calculateDigest,
   calculateJokulSignature,
   calculateSnapSignature,
+  calculateSnapAsymmetricSignature,
+  verifySnapWebhookSignature,
 } from '../src/core/signer.js';
 
 describe('DOKU Cryptographic Signer Engine', () => {
@@ -81,7 +83,7 @@ describe('DOKU Cryptographic Signer Engine', () => {
     expect(result.componentString).not.toMatch(/\n$/);
   });
 
-  it('calculates SNAP BI symmetric signature correctly with HMAC-SHA512', () => {
+  it('calculates SNAP BI symmetric signature correctly with HMAC-SHA512 and auto-strips Bearer prefix', () => {
     const params = {
       httpMethod: 'POST' as const,
       endpointUrl: '/snap-adapter/b2b/v1.0/qr/qr-mpm-generate',
@@ -93,9 +95,63 @@ describe('DOKU Cryptographic Signer Engine', () => {
 
     const result = calculateSnapSignature(params);
 
-    expect(result.stringToSign).toContain('POST:/snap-adapter/b2b/v1.0/qr/qr-mpm-generate:Bearer mock-token-123:');
+    // Must not contain "Bearer " inside stringToSign!
+    expect(result.stringToSign).toContain('POST:/snap-adapter/b2b/v1.0/qr/qr-mpm-generate:mock-token-123:');
     expect(result.minifiedBodyHash).toMatch(/^[a-f0-9]{64}$/);
     expect(result.signature).toBeTruthy();
   });
-});
 
+  it('calculates SNAP Asymmetric Signature (SHA256withRSA) for Get Token B2B API', () => {
+    // Generate temporary 2048-bit RSA keypair for testing
+    const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
+      modulusLength: 2048,
+    });
+    const privateKeyPem = privateKey.export({ type: 'pkcs8', format: 'pem' }).toString();
+    const publicKeyPem = publicKey.export({ type: 'spki', format: 'pem' }).toString();
+
+    const clientKey = 'MCH-0008-1296507211683';
+    const timestamp = '2026-11-05T01:18:39Z';
+
+    const result = calculateSnapAsymmetricSignature({
+      clientKey,
+      timestamp,
+      privateKeyPem,
+    });
+
+    expect(result.stringToSign).toBe(`${clientKey}|${timestamp}`);
+    expect(result.signature).toBeTruthy();
+
+    // Verify with public key
+    const verifier = crypto.createVerify('RSA-SHA256');
+    verifier.update(result.stringToSign, 'utf8');
+    verifier.end();
+    const isValid = verifier.verify(publicKeyPem, result.signature, 'base64');
+    expect(isValid).toBe(true);
+  });
+
+  it('verifies incoming SNAP Symmetric webhook notification correctly', () => {
+    const secretKey = 'SNAP-WEBHOOK-SECRET';
+    const params = {
+      httpMethod: 'POST' as const,
+      endpointUrl: '/api/snap/notify',
+      accessToken: 'token-abc',
+      secretKey,
+      timestamp: '2026-11-05T02:00:00Z',
+      body: { status: 'PAID', amount: '50000.00' },
+    };
+
+    const { signature } = calculateSnapSignature(params);
+
+    const isValid = verifySnapWebhookSignature({
+      httpMethod: 'POST',
+      endpointUrl: '/api/snap/notify',
+      accessToken: 'token-abc',
+      timestamp: '2026-11-05T02:00:00Z',
+      signature,
+      secretKey,
+      rawBody: { status: 'PAID', amount: '50000.00' },
+    });
+
+    expect(isValid).toBe(true);
+  });
+});
