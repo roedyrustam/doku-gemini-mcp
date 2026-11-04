@@ -1,0 +1,46 @@
+name: CI / Quality & Security Gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-build:
+    name: Build, Audit & Test (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Run DOKU Security & Rule Audit
+        run: pnpm run audit
+
+      - name: Run Vitest Unit Tests
+        run: pnpm test
+
+      - name: Build MCP Server Bundle
+        run: pnpm run build
+
+      - name: Verify Executable Distribution
+        run: test -f dist/index.js
+

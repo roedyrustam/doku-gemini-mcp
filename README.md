@@ -80,7 +80,7 @@ sequenceDiagram
 Whether you are implementing DOKU Checkout, Direct Virtual Accounts (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB), QRIS (Jokul & SNAP), E-Wallets (OVO, ShopeePay, DANA, LinkAja), Credit Cards, Direct Debit, PayLater, or Online Refunds, this plugin provides automated agentic workflows, cryptographic HMAC-SHA256 & SNAP signature generators, webhook verifiers, and production security readiness checks.
 
 ### Key Capabilities
-- **11 Specialized Agentic Skills**: Automated stack detection, project setup, credential configuration, postman collection generation, live sandbox testing, and production audits.
+- **12 Specialized Agentic Skills**: Automated stack detection, project setup, credential configuration, postman collection generation, live sandbox testing, and production audits.
 - **DOKU MCP Server**: Native Model Context Protocol server enabling AI agents to execute autonomous checkout and refund operations (AI Agentic Commerce).
 - **Cryptographic Strictness**: Built-in HMAC-SHA256 & SNAP HMAC-SHA512 request signature calculators and webhook notification validators adhering to official DOKU specifications.
 - **Multi-Language Support**: Scaffolding code for Node.js / TypeScript, Python, Go, PHP, Java, and Rust.
@@ -97,7 +97,7 @@ Whether you are implementing DOKU Checkout, Direct Virtual Accounts (BCA, Mandir
 Baik Anda mengimplementasikan DOKU Checkout, Virtual Account Langsung (BCA, Mandiri, BRI, BNI, Permata, Danamon, CIMB), QRIS (Jokul & SNAP), E-Wallet (OVO, ShopeePay, DANA, LinkAja), Kartu Kredit, Direct Debit, PayLater, maupun Online Refund, plugin ini menyediakan alur kerja agen otomatis, generator signature HMAC-SHA256 & SNAP kriptografis, verifikator webhook, dan pemeriksaan kesiapan keamanan produksi.
 
 ### Fitur Utama
-- **11 Skill Agen Terpesialisasi**: Deteksi stack otomatis, setup proyek, konfigurasi kredensial, pembuat koleksi Postman, penguji sandbox langsung, dan audit produksi.
+- **12 Skill Agen Terpesialisasi**: Deteksi stack otomatis, setup proyek, konfigurasi kredensial, pembuat koleksi Postman, penguji sandbox langsung, dan audit produksi.
 - **DOKU MCP Server**: Server Model Context Protocol asli yang memungkinkan agen AI menjalankan transaksi checkout & refund otonom (*AI Agentic Commerce*).
 - **Ketepatan Kriptografis**: Kalkulator signature permintaan HMAC-SHA256 & SNAP HMAC-SHA512 bawaan dan validator notifikasi webhook yang mematuhi spesifikasi resmi DOKU.
 - **Dukungan Multi-Bahasa**: Kode scaffolding untuk Node.js / TypeScript, Python, Go, PHP, Java, dan Rust.
@@ -125,7 +125,7 @@ Installing the plugin globally allows **Antigravity IDE** and **Gemini CLI** to 
 #### 2. Auto-Discovery Verification
 Once cloned into `~/.gemini/config/plugins/doku-gemini-mcp`, Antigravity IDE will automatically detect:
 - `plugin.json` metadata & rules (`AGENTS.md`, `rules/*.md`).
-- All 11 specialized skills under `skills/`.
+- All 12 specialized skills under `skills/`.
 
 ---
 
@@ -324,7 +324,7 @@ Enable your AI assistant (Antigravity, Gemini, Claude Desktop, Cursor) to execut
 Explore detailed technical guides in the [`docs/`](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs) directory:
 
 1. 📖 [**Skills Comprehensive Guide (`SKILLS_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/SKILLS_GUIDE.md)  
-   Detailed manual and trigger instructions for all 11 agentic skills.
+   Detailed manual and trigger instructions for all 12 agentic skills.
 2. 🔑 [**HMAC Request Signature Guide (`HMAC_SIGNATURE_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/HMAC_SIGNATURE_GUIDE.md)  
    Detailed cryptography formulas and code implementations for Jokul API v2 (HMAC-SHA256) and SNAP API v1.0 (HMAC-SHA512) signatures.
 3. 🤖 [**MCP Server Guide (`MCP_SERVER_GUIDE.md`)**](file:///c:/Users/roedy/.gemini/config/plugins/doku-gemini-mcp/docs/MCP_SERVER_GUIDE.md)  

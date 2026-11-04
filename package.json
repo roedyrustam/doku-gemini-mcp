@@ -1,0 +1,63 @@
+{
+  "name": "doku-gemini-mcp",
+  "version": "1.2.0",
+  "description": "Model Context Protocol (MCP) Server and Antigravity plugin for DOKU Payment Gateway (Jokul API v2 & SNAP API v1.0)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "doku-gemini-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "docs",
+    "rules",
+    "skills",
+    "scripts",
+    "AGENTS.md",
+    "plugin.json",
+    "gemini-extension.json",
+    "mcp_config.json"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "audit": "node scripts/audit-doku.mjs",
+    "export-postman": "node scripts/export-postman.mjs",
+    "test-sandbox": "node scripts/test-sandbox.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "author": "Roedy Rustam",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/roedyrustam/doku-gemini-mcp.git"
+  },
+  "keywords": [
+    "doku",
+    "payment-gateway",
+    "mcp",
+    "model-context-protocol",
+    "gemini",
+    "antigravity",
+    "claude-desktop",
+    "jokul-api",
+    "snap-api",
+    "qris",
+    "virtual-account"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "axios": "^1.7.9",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "tsup": "^8.4.0",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
+  }
+}
+

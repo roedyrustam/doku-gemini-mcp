@@ -7,16 +7,19 @@
 
 # Dependencies & Build Outputs
 node_modules/
-dist/
 build/
 out/
+coverage/
 .doku-config.json
 .doku-spec.json
+doku-api-collection.json
 
-# Operating System Files
+# Operating System Files & Crash Dumps
 .DS_Store
 Thumbs.db
 ehthumbs.db
+*.stackdump
+*.core
 
 # IDE & Editor Settings
 .idea/
