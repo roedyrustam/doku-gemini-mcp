@@ -28,6 +28,7 @@
     "audit": "node scripts/audit-doku.mjs",
     "export-postman": "node scripts/export-postman.mjs",
     "test-sandbox": "node scripts/test-sandbox.mjs",
+    "set-topics": "node scripts/set-github-topics.mjs",
     "typecheck": "tsc --noEmit",
     "prepack": "pnpm run build && pnpm run audit && pnpm test"
   },
