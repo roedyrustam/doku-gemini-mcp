@@ -866,7 +866,7 @@ var allTools = [
 async function main() {
   const client = new DokuClient();
   const env = client.getEnvironment();
-  console.error("[doku-gemini-mcp] Starting DOKU MCP Server v1.2.0");
+  console.error("[doku-gemini-mcp] Starting DOKU MCP Server v1.3.0");
   console.error(
     `[doku-gemini-mcp] Mode: ${env.isProduction ? "PRODUCTION (LIVE)" : "SANDBOX"}`
   );
@@ -880,7 +880,7 @@ async function main() {
   const server = new Server(
     {
       name: "doku-gemini-mcp",
-      version: "1.2.0"
+      version: "1.3.0"
     },
     {
       capabilities: {
